@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="GRSCPU" transaction-type="RESOURCE_LOCAL">
+    <class>com.grsc.modelo.entities.Justificacion</class>
+    <class>com.grsc.modelo.entities.Analista</class>
+    <class>com.grsc.modelo.entities.Estado</class>
+    <class>com.grsc.modelo.entities.TipoReclamo</class>
+    <class>com.grsc.modelo.entities.Localidad</class>
+    <class>com.grsc.modelo.entities.Evento</class>
+    <class>com.grsc.modelo.entities.AccionConstancia</class>
+    <class>com.grsc.modelo.entities.ConvocatoriaAsistencia</class>
+    <class>com.grsc.modelo.entities.Roles</class>
+    <class>com.grsc.modelo.entities.AccionReclamo</class>
+    <class>com.grsc.modelo.entities.Generacion</class>
+    <class>com.grsc.modelo.entities.Tutor</class>
+    <class>com.grsc.modelo.entities.Area</class>
+    <class>com.grsc.modelo.entities.Constancia</class>
+    <class>com.grsc.modelo.entities.Departamento</class>
+    <class>com.grsc.modelo.entities.Funcionalidades</class>
+    <class>com.grsc.modelo.entities.Estudiante</class>
+    <class>com.grsc.modelo.entities.TipoTutor</class>
+    <class>com.grsc.modelo.entities.Responsabilidad</class>
+    <class>com.grsc.modelo.entities.Usuarios</class>
+    <class>com.grsc.modelo.entities.AccionJustificacion</class>
+    <class>com.grsc.modelo.entities.TipoConstancia</class>
+    <class>com.grsc.modelo.entities.Reclamo</class>
+    <class>com.grsc.modelo.entities.Habilitados</class>
+    <class>com.grsc.modelo.entities.Itr</class>
+    <class>com.grsc.modelo.entities.EstadoUsuario</class>
+    <class>com.grsc.modelo.entities.EstadoPeticion</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+      <property name="javax.persistence.jdbc.user" value="PROYECTO"/>
+      <property name="javax.persistence.jdbc.password" value="PROYECTO"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+      <property name="hibernate.show_sql" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
