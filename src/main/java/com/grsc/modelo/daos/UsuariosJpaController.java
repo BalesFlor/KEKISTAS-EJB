@@ -5,6 +5,7 @@ import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.exceptions.PreexistingEntityException;
 import com.grsc.logica.ejb.AnalistaBean;
 import com.grsc.logica.ejb.DocenteBean;
+import com.grsc.logica.ejb.EstadoUsuarioBean;
 import com.grsc.logica.ejb.EstudianteBean;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -214,52 +215,11 @@ public class UsuariosJpaController implements Serializable {
                 throw new NonexistentEntityException("The usuarios with id " + id + " no longer exists.", enfe);
             }
             
-            Tutor tutor = usuarios.getTutor();
-            DocenteBean docenteBean= new DocenteBean();
-            if (tutor != null) {
-                docenteBean.eliminarDocente(tutor.getIdUsuario());
-                tutor = em.merge(tutor);
-            }
+            BigInteger idEstadoEliminado= BigInteger.valueOf(3L);
+            EstadoUsuarioBean estadoBean= new EstadoUsuarioBean();
+            EstadoUsuario estadoEliminado=estadoBean.buscar(idEstadoEliminado);
+            usuarios.setIdEstadoUsuario(estadoEliminado);
             
-            Analista analista = usuarios.getAnalista();
-            AnalistaBean analistaBean= new AnalistaBean();
-            if (analista != null) {
-                analistaBean.eliminarAnalista(analista.getIdUsuario());
-                analista = em.merge(analista);
-            }
-            
-            Estudiante estudiante = usuarios.getEstudiante();
-            EstudianteBean estudianteBean= new EstudianteBean();
-            if (analista != null) {
-                estudianteBean.eliminarEstudiante(estudiante.getIdUsuario());
-                estudiante = em.merge(estudiante);
-            }
-            
-            Departamento idDepartamento = usuarios.getDepartamento();
-            if (idDepartamento != null) {
-                idDepartamento.getUsuariosList().remove(usuarios);
-                idDepartamento = em.merge(idDepartamento);
-            }
-            
-            Itr idItr = usuarios.getItr();
-            if (idItr != null) {
-                idItr.getUsuariosList().remove(usuarios);
-                idItr = em.merge(idItr);
-            }
-            
-            Localidad idLocalidad = usuarios.getLocalidad();
-            if (idLocalidad != null) {
-                idLocalidad.getUsuariosList().remove(usuarios);
-                idLocalidad = em.merge(idLocalidad);
-            }
-            
-            Roles idRol = usuarios.getRol();
-            if (idRol != null) {
-                idRol.getUsuariosList().remove(usuarios);
-                idRol = em.merge(idRol);
-            }
-            
-            em.remove(usuarios);
             em.getTransaction().commit();
         } finally {
             if (em != null) {

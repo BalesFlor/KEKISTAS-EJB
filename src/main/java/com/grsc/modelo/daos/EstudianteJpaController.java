@@ -20,6 +20,7 @@ import com.grsc.modelo.entities.Justificacion;
 import java.math.BigInteger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.JOptionPane;
 import javax.transaction.Transactional;
 
 public class EstudianteJpaController implements Serializable {
@@ -239,48 +240,41 @@ public class EstudianteJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The estudiante with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<ConvocatoriaAsistencia> convocatoriaAsistenciaListOrphanCheck = estudiante.getConvocatoriaAsistenciaList();
-            for (ConvocatoriaAsistencia convocatoriaAsistenciaListOrphanCheckConvocatoriaAsistencia : convocatoriaAsistenciaListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Estudiante (" + estudiante + ") cannot be destroyed since the ConvocatoriaAsistencia " + convocatoriaAsistenciaListOrphanCheckConvocatoriaAsistencia + " in its convocatoriaAsistenciaList field has a non-nullable estudiante field.");
+            
+            List<ConvocatoriaAsistencia> listaConvocatoriaAsistencias = estudiante.getConvocatoriaAsistenciaList();
+            if (listaConvocatoriaAsistencias != null) {
+                estudiante.setConvocatoriaAsistenciaList(null);
+                listaConvocatoriaAsistencias = em.merge(listaConvocatoriaAsistencias);
             }
-            List<Constancia> constanciaListOrphanCheck = estudiante.getConstanciaList();
-            for (Constancia constanciaListOrphanCheckConstancia : constanciaListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Estudiante (" + estudiante + ") cannot be destroyed since the Constancia " + constanciaListOrphanCheckConstancia + " in its constanciaList field has a non-nullable idUsuario field.");
+            
+            List<Constancia> listaConstancias = estudiante.getConstanciaList();
+            if (listaConstancias != null) {
+                estudiante.setConstanciaList(null);
+                listaConstancias = em.merge(listaConstancias);
             }
-            List<Reclamo> reclamoListOrphanCheck = estudiante.getReclamoList();
-            for (Reclamo reclamoListOrphanCheckReclamo : reclamoListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Estudiante (" + estudiante + ") cannot be destroyed since the Reclamo " + reclamoListOrphanCheckReclamo + " in its reclamoList field has a non-nullable idUsuario field.");
+            
+            List<Reclamo> listaReclamos = estudiante.getReclamoList();
+            if (listaReclamos != null) {
+                estudiante.setReclamoList(null);
+                listaReclamos = em.merge(listaReclamos);
             }
-            List<Justificacion> justificacionListOrphanCheck = estudiante.getJustificacionList();
-            for (Justificacion justificacionListOrphanCheckJustificacion : justificacionListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Estudiante (" + estudiante + ") cannot be destroyed since the Justificacion " + justificacionListOrphanCheckJustificacion + " in its justificacionList field has a non-nullable idUsuario field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            List<Justificacion> listaJustificacions = estudiante.getJustificacionList();
+            if (listaJustificacions != null) {
+                estudiante.setJustificacionList(null);
+                listaJustificacions = em.merge(listaJustificacions);
             }
             Generacion anioGen = estudiante.getAnioGen();
             if (anioGen != null) {
                 anioGen.getEstudianteList().remove(estudiante);
-                anioGen = em.merge(anioGen);
+                em.merge(anioGen);
             }
             Usuarios usuarios = estudiante.getUsuarios();
             if (usuarios != null) {
                 usuarios.setEstudiante(null);
-                usuarios = em.merge(usuarios);
-            }
+                em.merge(usuarios);
+                
+                }
+            
             em.remove(estudiante);
             em.getTransaction().commit();
         } finally {
