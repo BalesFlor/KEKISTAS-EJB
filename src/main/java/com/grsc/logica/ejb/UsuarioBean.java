@@ -184,4 +184,9 @@ public class UsuarioBean implements UsuarioBeanRemote {
         return controlador.findUsuariosEntities();
     }
     
+    @Override
+    public EstadoUsuario obtenerEstado(BigInteger id) {
+        Usuarios user = controlador.findUsuarios(id);
+        return user.getIdEstadoUsuario();
+    }
 }

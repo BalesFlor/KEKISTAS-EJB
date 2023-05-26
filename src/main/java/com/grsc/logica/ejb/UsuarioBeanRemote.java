@@ -1,8 +1,8 @@
 package com.grsc.logica.ejb;
 
 import com.grsc.modelo.entities.Departamento;
-import com.grsc.modelo.entities.EstadoUsuario;
 import com.grsc.modelo.entities.Itr;
+import com.grsc.modelo.entities.EstadoUsuario;
 import com.grsc.modelo.entities.Localidad;
 import com.grsc.modelo.entities.Roles;
 import javax.ejb.Remote;
@@ -32,4 +32,5 @@ public interface UsuarioBeanRemote {
     Boolean existeUserByMailC(String mailConsti);
     Boolean existeUserByMailP(String mailPers);
     List<Usuarios> listarUsuarios();
+    EstadoUsuario obtenerEstado(BigInteger id);
 }
