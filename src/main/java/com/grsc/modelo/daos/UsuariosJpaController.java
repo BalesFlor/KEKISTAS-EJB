@@ -20,6 +20,7 @@ import com.grsc.modelo.entities.Itr;
 import com.grsc.modelo.entities.Localidad;
 import com.grsc.modelo.entities.Roles;
 import com.grsc.modelo.entities.Estudiante;
+import com.grsc.modelo.entities.Reclamo;
 import com.grsc.modelo.entities.Usuarios;
 import java.math.BigInteger;
 import java.util.ArrayList;
