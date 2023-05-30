@@ -8,4 +8,5 @@ import javax.ejb.Remote;
 public interface ItrBeanRemote {
     
     List<Itr> listarItrs();
+    Boolean altaITR(Itr itr);
 }

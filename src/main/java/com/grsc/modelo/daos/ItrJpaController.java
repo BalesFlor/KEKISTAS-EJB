@@ -29,44 +29,14 @@ public class ItrJpaController implements Serializable {
     }
 
     public void create(Itr itr) throws PreexistingEntityException, Exception {
-        if (itr.getUsuariosList() == null) {
-            itr.setUsuariosList(new ArrayList<Usuarios>());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Departamento idDepartamento = itr.getIdDepartamento();
-            if (idDepartamento != null) {
-                idDepartamento = em.getReference(idDepartamento.getClass(), idDepartamento.getIdDepartamento());
-                itr.setIdDepartamento(idDepartamento);
-            }
-            List<Usuarios> attachedUsuariosList = new ArrayList<Usuarios>();
-            for (Usuarios usuariosListUsuariosToAttach : itr.getUsuariosList()) {
-                usuariosListUsuariosToAttach = em.getReference(usuariosListUsuariosToAttach.getClass(), usuariosListUsuariosToAttach.getIdUsuario());
-                attachedUsuariosList.add(usuariosListUsuariosToAttach);
-            }
-            itr.setUsuariosList(attachedUsuariosList);
+            
             em.persist(itr);
-            if (idDepartamento != null) {
-                idDepartamento.getItrList().add(itr);
-                idDepartamento = em.merge(idDepartamento);
-            }
-            for (Usuarios usuariosListUsuarios : itr.getUsuariosList()) {
-                Itr oldIdItrOfUsuariosListUsuarios = usuariosListUsuarios.getItr();
-                usuariosListUsuarios.setItr(itr);
-                usuariosListUsuarios = em.merge(usuariosListUsuarios);
-                if (oldIdItrOfUsuariosListUsuarios != null) {
-                    oldIdItrOfUsuariosListUsuarios.getUsuariosList().remove(usuariosListUsuarios);
-                    oldIdItrOfUsuariosListUsuarios = em.merge(oldIdItrOfUsuariosListUsuarios);
-                }
-            }
+            em.flush();
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findItr(itr.getIdItr()) != null) {
-                throw new PreexistingEntityException("Itr " + itr + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
