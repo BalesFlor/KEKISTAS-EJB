@@ -162,6 +162,22 @@ public class Reclamo implements Serializable {
         this.accionReclamoList = accionReclamoList;
     }
 
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

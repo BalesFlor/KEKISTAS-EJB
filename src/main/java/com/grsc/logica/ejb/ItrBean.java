@@ -20,7 +20,7 @@ public class ItrBean implements ItrBeanRemote{
     public List<Itr> listarItrs() {
         return controlador.findItrEntities();
     }
-
+/*
     @Override
     public Boolean altaITR(Itr itr){
 
@@ -52,8 +52,8 @@ public class ItrBean implements ItrBeanRemote{
         if(!(itr==null)){
             existe=true;
         }
-*/
+    
         return existe;
     }
-
+*/
 }
