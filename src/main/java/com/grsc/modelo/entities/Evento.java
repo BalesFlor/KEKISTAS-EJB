@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -56,6 +57,9 @@ public class Evento implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "TITULO")
     private String titulo;
+    @JoinColumn(name = "TIPO_EVENTO", referencedColumnName = "ID")
+    @ManyToOne
+    private TipoEvento tipoEvento;
 
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(generator = "evento_seq")
@@ -160,5 +164,13 @@ public class Evento implements Serializable {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
+    }
+
+    public TipoEvento getTipoEvento() {
+        return tipoEvento;
+    }
+
+    public void setTipoEvento(TipoEvento tipoEvento) {
+        this.tipoEvento = tipoEvento;
     }
 }

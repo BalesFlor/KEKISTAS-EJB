@@ -28,6 +28,7 @@
     <class>com.grsc.modelo.entities.Itr</class>
     <class>com.grsc.modelo.entities.EstadoUsuario</class>
     <class>com.grsc.modelo.entities.EstadoPeticion</class>
+    <class>com.grsc.modelo.entities.TipoEvento</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>

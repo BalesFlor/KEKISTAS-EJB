@@ -1,13 +1,13 @@
 package com.grsc.modelo.daos;
 
-import com.grsc.exceptions.IllegalOrphanException;
-import com.grsc.exceptions.NonexistentEntityException;
-import com.grsc.exceptions.PreexistingEntityException;
+import com.grsc.modelo.daos.exceptions.IllegalOrphanException;
+import com.grsc.modelo.daos.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.grsc.modelo.entities.TipoEvento;
 import com.grsc.modelo.entities.Analista;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class EventoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Evento evento) throws PreexistingEntityException, Exception {
+    public void create(Evento evento) {
         if (evento.getAnalistaList() == null) {
             evento.setAnalistaList(new ArrayList<Analista>());
         }
@@ -39,6 +39,11 @@ public class EventoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            TipoEvento tipoEvento = evento.getTipoEvento();
+            if (tipoEvento != null) {
+                tipoEvento = em.getReference(tipoEvento.getClass(), tipoEvento.getId());
+                evento.setTipoEvento(tipoEvento);
+            }
             List<Analista> attachedAnalistaList = new ArrayList<Analista>();
             for (Analista analistaListAnalistaToAttach : evento.getAnalistaList()) {
                 analistaListAnalistaToAttach = em.getReference(analistaListAnalistaToAttach.getClass(), analistaListAnalistaToAttach.getIdUsuario());
@@ -52,6 +57,10 @@ public class EventoJpaController implements Serializable {
             }
             evento.setConvocatoriaAsistenciaList(attachedConvocatoriaAsistenciaList);
             em.persist(evento);
+            if (tipoEvento != null) {
+                tipoEvento.getEventoList().add(evento);
+                tipoEvento = em.merge(tipoEvento);
+            }
             for (Analista analistaListAnalista : evento.getAnalistaList()) {
                 analistaListAnalista.getEventoList().add(evento);
                 analistaListAnalista = em.merge(analistaListAnalista);
@@ -66,11 +75,6 @@ public class EventoJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findEvento(evento.getIdEvento()) != null) {
-                throw new PreexistingEntityException("Evento " + evento + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -84,6 +88,8 @@ public class EventoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Evento persistentEvento = em.find(Evento.class, evento.getIdEvento());
+            TipoEvento tipoEventoOld = persistentEvento.getTipoEvento();
+            TipoEvento tipoEventoNew = evento.getTipoEvento();
             List<Analista> analistaListOld = persistentEvento.getAnalistaList();
             List<Analista> analistaListNew = evento.getAnalistaList();
             List<ConvocatoriaAsistencia> convocatoriaAsistenciaListOld = persistentEvento.getConvocatoriaAsistenciaList();
@@ -100,6 +106,10 @@ public class EventoJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            if (tipoEventoNew != null) {
+                tipoEventoNew = em.getReference(tipoEventoNew.getClass(), tipoEventoNew.getId());
+                evento.setTipoEvento(tipoEventoNew);
+            }
             List<Analista> attachedAnalistaListNew = new ArrayList<Analista>();
             for (Analista analistaListNewAnalistaToAttach : analistaListNew) {
                 analistaListNewAnalistaToAttach = em.getReference(analistaListNewAnalistaToAttach.getClass(), analistaListNewAnalistaToAttach.getIdUsuario());
@@ -115,6 +125,14 @@ public class EventoJpaController implements Serializable {
             convocatoriaAsistenciaListNew = attachedConvocatoriaAsistenciaListNew;
             evento.setConvocatoriaAsistenciaList(convocatoriaAsistenciaListNew);
             evento = em.merge(evento);
+            if (tipoEventoOld != null && !tipoEventoOld.equals(tipoEventoNew)) {
+                tipoEventoOld.getEventoList().remove(evento);
+                tipoEventoOld = em.merge(tipoEventoOld);
+            }
+            if (tipoEventoNew != null && !tipoEventoNew.equals(tipoEventoOld)) {
+                tipoEventoNew.getEventoList().add(evento);
+                tipoEventoNew = em.merge(tipoEventoNew);
+            }
             for (Analista analistaListOldAnalista : analistaListOld) {
                 if (!analistaListNew.contains(analistaListOldAnalista)) {
                     analistaListOldAnalista.getEventoList().remove(evento);
@@ -177,6 +195,11 @@ public class EventoJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            TipoEvento tipoEvento = evento.getTipoEvento();
+            if (tipoEvento != null) {
+                tipoEvento.getEventoList().remove(evento);
+                tipoEvento = em.merge(tipoEvento);
             }
             List<Analista> analistaList = evento.getAnalistaList();
             for (Analista analistaListAnalista : analistaList) {

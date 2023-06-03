@@ -8,6 +8,7 @@ import com.grsc.modelo.entities.TipoTutor;
 import com.grsc.modelo.entities.Tutor;
 import com.grsc.modelo.entities.Usuarios;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -76,5 +77,10 @@ public class DocenteBean implements DocenteBeanRemote{
            }
         }
         return pudeCrear;
+    }
+
+    @Override
+    public List<Tutor> listarDocentes(){
+        return controlador.findTutorEntities();
     }
 }
