@@ -196,5 +196,9 @@ public class ItrJpaController implements Serializable {
             em.close();
         }
     }
+
+    public Itr findByIDItr(BigInteger idITR) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

@@ -122,4 +122,7 @@ public class Itr implements Serializable {
     public String toString() {
         return "com.grsc.modelo.entities.Itr[ idItr=" + idItr + " ]";
     }
+
+    
+   
 }
