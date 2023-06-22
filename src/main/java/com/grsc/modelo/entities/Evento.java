@@ -38,6 +38,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Evento.findAll", query = "SELECT e FROM Evento e"),
     @NamedQuery(name = "Evento.findByIdEvento", query = "SELECT e FROM Evento e WHERE e.idEvento = :idEvento"),
     @NamedQuery(name = "Evento.findByFechaHoraInicio", query = "SELECT e FROM Evento e WHERE e.fechaHoraInicio = :fechaHoraInicio"),
+    @NamedQuery(name = "Evento.findByFechasTitulo", query = "SELECT e FROM Evento e WHERE e.fechaHoraInicio = :fechaHoraInicio AND e.fechaHoraFin = :fechaHoraFin AND e.titulo = titulo"),
     @NamedQuery(name = "Evento.findByFechaHoraFin", query = "SELECT e FROM Evento e WHERE e.fechaHoraFin = :fechaHoraFin"),
     @NamedQuery(name = "Evento.findByTitulo", query = "SELECT e FROM Evento e WHERE e.titulo = :titulo")})
 public class Evento implements Serializable {

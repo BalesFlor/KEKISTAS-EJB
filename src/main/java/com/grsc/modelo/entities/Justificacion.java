@@ -36,6 +36,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Justificacion.findAll", query = "SELECT j FROM Justificacion j"),
     @NamedQuery(name = "Justificacion.findByIdJustificacion", query = "SELECT j FROM Justificacion j WHERE j.idJustificacion = :idJustificacion"),
     @NamedQuery(name = "Justificacion.findByFechaHora", query = "SELECT j FROM Justificacion j WHERE j.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Justificacion.findByHoraEventoUsuario", query = "SELECT j FROM Justificacion j WHERE j.fechaHora = :fechaHora AND j.idEvento = :idEvento AND j.idUsuario = :idUsuario"),
     @NamedQuery(name = "Justificacion.findByDetalle", query = "SELECT j FROM Justificacion j WHERE j.detalle = :detalle")})
 public class Justificacion implements Serializable {
 
@@ -61,6 +62,9 @@ public class Justificacion implements Serializable {
     @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO")
     @ManyToOne(optional = false)
     private EstadoPeticion idEstadoPeticion;
+    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO")
+    @ManyToOne(optional = false)
+    private Evento idEvento;
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
     @ManyToOne(optional = false)
     private Estudiante idUsuario;
@@ -80,6 +84,13 @@ public class Justificacion implements Serializable {
         this.detalle = detalle;
     }
 
+    public Justificacion(Date fechaHora, String detalle,  Evento idEvento, Estudiante idUsuario) {
+        this.fechaHora = fechaHora;
+        this.detalle = detalle;
+        this.idEvento = idEvento;
+        this.idUsuario = idUsuario;
+    }
+    
     public BigInteger getIdJustificacion() {
         return idJustificacion;
     }
@@ -113,6 +124,24 @@ public class Justificacion implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public Evento getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Evento idEvento) {
+        this.idEvento = idEvento;
+    }
+    
+    
+    
     @XmlTransient
     public List<AccionJustificacion> getAccionJustificacionList() {
         return accionJustificacionList;

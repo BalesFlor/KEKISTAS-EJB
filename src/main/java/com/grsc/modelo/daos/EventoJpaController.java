@@ -14,6 +14,7 @@ import java.util.List;
 import com.grsc.modelo.entities.ConvocatoriaAsistencia;
 import com.grsc.modelo.entities.Evento;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -246,6 +247,40 @@ public class EventoJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public Evento findEvento(Date fechaHoraInicio, Date fechaHoraFin, String titulo) {
+        EntityManager em = getEntityManager();
+        Evento eventoRes = new Evento();
+        try{
+        List<Evento> listaResultado = em.createNamedQuery("Evento.findByFechasTitulo")
+                    .setParameter("fechaHoraInicio", fechaHoraInicio)
+                    .setParameter("fechaHoraFin", fechaHoraFin)
+                    .setParameter("titulo", titulo)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idEvento = listaResultado.get(i).getIdEvento();
+                    Date fechaHInicio = listaResultado.get(i).getFechaHoraInicio();
+                    Date fechaHFin = listaResultado.get(i).getFechaHoraFin();
+                    String tit = listaResultado.get(i).getTitulo();
+                    TipoEvento tipoEvento = listaResultado.get(i).getTipoEvento();
+                    
+                    
+                    eventoRes = Evento.builder()
+                            .idEvento(idEvento)
+                            .fechaHoraInicio(fechaHInicio)
+                            .fechaHoraFin(fechaHFin)
+                            .titulo(tit)
+                            .tipoEvento(tipoEvento)
+                            .build();
+                }
+        }
+        return eventoRes;
+        }finally {
+            em.close();
+        }        
     }
 
     public int getEventoCount() {
