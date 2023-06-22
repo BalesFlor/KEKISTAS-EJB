@@ -217,37 +217,29 @@ public class EventoJpaController implements Serializable {
     }
 
     public List<Evento> findEventoEntities() {
-        EntityManager em = getEntityManager();
-        List<Evento> listaEvento = null;
-        try{
-        List<Evento> listaResultado = em.createNamedQuery("Evento.findAll")
-                .getResultList();
-        if (!listaResultado.isEmpty()) {
-                for (int i = 0; i < listaResultado.size(); i++) {
-                    
-                    BigInteger idEvento = listaResultado.get(i).getIdEvento();
-                    Date fechaHInicio = listaResultado.get(i).getFechaHoraInicio();
-                    Date fechaHFin = listaResultado.get(i).getFechaHoraFin();
-                    String tit = listaResultado.get(i).getTitulo();
-                    TipoEvento tipoEvento = listaResultado.get(i).getTipoEvento();
-                    
-                    
-                    Evento eventoRes = Evento.builder()
-                            .idEvento(idEvento)
-                            .fechaHoraInicio(fechaHInicio)
-                            .fechaHoraFin(fechaHFin)
-                            .titulo(tit)
-                            .tipoEvento(tipoEvento)
-                            .build();
-                    
-                    listaEvento.add(eventoRes);
-                }
-        }
-        return listaEvento;
-        }finally {
-            em.close();
-        }        
+        return findEventoEntities(true, -1, -1);
     }
+
+    public List<Evento> findEventoEntities(int maxResults, int firstResult) {
+        return findEventoEntities(false, maxResults, firstResult);
+    }
+
+    private List<Evento> findEventoEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Evento.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public Evento findEvento(BigInteger id) {
         EntityManager em = getEntityManager();
         try {
