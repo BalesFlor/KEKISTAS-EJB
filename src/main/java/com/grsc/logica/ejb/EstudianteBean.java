@@ -51,6 +51,11 @@ public class EstudianteBean implements EstudianteBeanRemote{
         return pudeEliminar;
 
     }
+   
+    @Override
+    public Estudiante buscarEstudiante(BigInteger id){
+        return controlador.findEstudiante(id);
+    } 
     
     @Override
     public Boolean ingresarEstudiante(BigInteger id, Generacion anio) {

@@ -60,19 +60,15 @@ public class JustificacionJpaController implements Serializable {
 	}
 
 
-    public void destroy(BigInteger id) throws Exception {
+    public void destroy(BigInteger id) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
        		Justificacion justificacion = em.find(Justificacion.class, id);
 		if (justificacion == null) {
-			throw new Exception("No existe la justificacion a borrar. Id=" + justificacion.getIdJustificacion());
+			throw new NonexistentEntityException("No existe la justificacion a borrar. Id=" + justificacion.getIdJustificacion());
 		}
-		try {
-		justificacion = em.merge(justificacion);
+		em.merge(justificacion);
 		em.flush();
-		}catch(Exception e) {
-			throw new Exception("No se pudo borrar la justificacion. Id=" + justificacion.getIdJustificacion());
-		}
 	}
 
     public List<Justificacion> findJustificacionEntities() {

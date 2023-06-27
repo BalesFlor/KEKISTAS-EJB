@@ -36,6 +36,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Reclamo.findAll", query = "SELECT r FROM Reclamo r"),
     @NamedQuery(name = "Reclamo.findByIdReclamo", query = "SELECT r FROM Reclamo r WHERE r.idReclamo = :idReclamo"),
     @NamedQuery(name = "Reclamo.findByFechaHora", query = "SELECT r FROM Reclamo r WHERE r.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.fecha = :fecha AND r.fechaHora = :fechaHora"),
     @NamedQuery(name = "Reclamo.findByDetalle", query = "SELECT r FROM Reclamo r WHERE r.detalle = :detalle"),
     @NamedQuery(name = "Reclamo.findByTitulo", query = "SELECT r FROM Reclamo r WHERE r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findBySemestre", query = "SELECT r FROM Reclamo r WHERE r.semestre = :semestre"),
@@ -76,6 +77,9 @@ public class Reclamo implements Serializable {
     @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO")
     @ManyToOne(optional = false)
     private EstadoPeticion idEstadoPeticion;
+    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO")
+    @ManyToOne(optional = false)
+    private Evento idEvento;
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
     @ManyToOne(optional = false)
     private Estudiante idUsuario;
@@ -98,6 +102,18 @@ public class Reclamo implements Serializable {
 
     public BigInteger getIdReclamo() {
         return idReclamo;
+    }
+
+    public Reclamo(Date fechaHora, String detalle, String titulo, BigInteger semestre, Date fecha, BigInteger creditos, EstadoPeticion idEstadoPeticion, Evento idEvento, Estudiante idUsuario) {
+        this.fechaHora = fechaHora;
+        this.detalle = detalle;
+        this.titulo = titulo;
+        this.semestre = semestre;
+        this.fecha = fecha;
+        this.creditos = creditos;
+        this.idEstadoPeticion = idEstadoPeticion;
+        this.idEvento = idEvento;
+        this.idUsuario = idUsuario;
     }
 
     public void setIdReclamo(BigInteger idReclamo) {
@@ -178,13 +194,21 @@ public class Reclamo implements Serializable {
         this.titulo = titulo;
     }
 
+    public Evento getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Evento idEvento) {
+        this.idEvento = idEvento;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (idReclamo != null ? idReclamo.hashCode() : 0);
         return hash;
     }
-
+    
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof Reclamo)) {

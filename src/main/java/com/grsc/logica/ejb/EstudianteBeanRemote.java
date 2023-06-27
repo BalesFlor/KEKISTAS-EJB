@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 @Remote
 public interface EstudianteBeanRemote {
     Boolean existeEstudiante(BigInteger idUser);
+    Estudiante buscarEstudiante(BigInteger idUser);
     Boolean eliminarEstudiante(BigInteger idUser);
     Boolean ingresarEstudiante(BigInteger id,Generacion anio);
     List<Estudiante> listarEstudiantes();
