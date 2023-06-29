@@ -1,5 +1,6 @@
 package com.grsc.modelo.entities;
 
+import com.sun.istack.Nullable;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
@@ -36,7 +37,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Reclamo.findAll", query = "SELECT r FROM Reclamo r"),
     @NamedQuery(name = "Reclamo.findByIdReclamo", query = "SELECT r FROM Reclamo r WHERE r.idReclamo = :idReclamo"),
     @NamedQuery(name = "Reclamo.findByFechaHora", query = "SELECT r FROM Reclamo r WHERE r.fechaHora = :fechaHora"),
-    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.fecha = :fecha AND r.fechaHora = :fechaHora"),
+    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.fechaHora = :fechaHora AND r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findByDetalle", query = "SELECT r FROM Reclamo r WHERE r.detalle = :detalle"),
     @NamedQuery(name = "Reclamo.findByTitulo", query = "SELECT r FROM Reclamo r WHERE r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findBySemestre", query = "SELECT r FROM Reclamo r WHERE r.semestre = :semestre"),
@@ -79,6 +80,7 @@ public class Reclamo implements Serializable {
     private EstadoPeticion idEstadoPeticion;
     @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO")
     @ManyToOne(optional = false)
+    @Nullable
     private Evento idEvento;
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
     @ManyToOne(optional = false)
