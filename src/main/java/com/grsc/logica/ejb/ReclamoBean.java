@@ -1,7 +1,6 @@
 package com.grsc.logica.ejb;
 
 import com.grsc.modelo.daos.ReclamoJpaController;
-import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Estudiante;
 import com.grsc.modelo.entities.Reclamo;
 import com.grsc.modelo.entities.Evento;
@@ -25,11 +24,11 @@ public class ReclamoBean implements ReclamoBeanRemote {
 
     @Override
     public Boolean altaReclamo(String titulo, String descripcion, Evento evento, 
-            BigInteger semestre, Estudiante estudiante, Date fechaHora, Date fecha, EstadoPeticion idEstado) {
+            BigInteger semestre, Estudiante estudiante, Date fechaHora, Date fecha) {
         
         boolean pudeCrear = false;
 
-        if ( existeUserByDoc(estudiante,fecha,titulo)) {
+        if ( existeReclamo(estudiante,titulo) ) {
             System.out.println("Reclamo ya registrado");
         } else {
             Reclamo reclamo = Reclamo.builder()
@@ -38,9 +37,8 @@ public class ReclamoBean implements ReclamoBeanRemote {
                     .idEvento(evento)
                     .semestre(semestre)
                     .idUsuario(estudiante)
-                    .fechaHora(fecha)
-                    .fecha(fechaHora)
-                    .idEstadoPeticion(idEstado)
+                    .fechaHora(fechaHora)
+                    .fecha(fecha)
                     .build();
 
             try {
@@ -51,24 +49,25 @@ public class ReclamoBean implements ReclamoBeanRemote {
             }
         }
         return pudeCrear;
+ }
+
+    @Override
+    public Reclamo buscarReclamo(Estudiante estudiante, String titulo) {
+       return controlador.buscarReclamo(estudiante, titulo);
     }
 
     @Override
-    public Reclamo buscarReclamo(Estudiante estudiante, Date fecha, String titulo) {
-       return controlador.buscarReclamo(estudiante, fecha, titulo);
-    }
-
-    @Override
-    public Boolean altaReclamoBasico(String titulo, String descripcion, Date fecha, Estudiante estudiante, EstadoPeticion idEstado) {
+    public Boolean altaReclamoBasico(String titulo, String descripcion, Date fechaHora, Estudiante estudiante) {
     
         boolean pudeCrear = false;
-
+        if ( existeReclamo(estudiante,titulo) ) {
+            System.out.println("Reclamo ya registrado");
+        } else {
             Reclamo reclamo = Reclamo.builder()
                     .titulo(titulo)
                     .detalle(descripcion)
-                    .fechaHora(fecha)
+                    .fechaHora(fechaHora)
                     .idUsuario(estudiante)
-                    .idEstadoPeticion(idEstado)
                     .build();
 
             try {
@@ -76,17 +75,15 @@ public class ReclamoBean implements ReclamoBeanRemote {
                 pudeCrear = true;
             } catch (Exception ex) {
                 Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }     
+        }
         return pudeCrear;
     }
 
     @Override
-    public Boolean existeUserByDoc(Estudiante estudiante, Date fecha, String titulo) {
-        Boolean existe = false;
-        Reclamo rec= controlador.buscarReclamo(estudiante,fecha,titulo);
-        if(!(rec==null)){
-            existe=true;
-        }
-        return existe;
+    public Boolean existeReclamo(Estudiante estudiante, String titulo) {
+        Reclamo rec = buscarReclamo(estudiante,titulo);
+        return rec.getIdReclamo()!=null;
+        
     }
 }

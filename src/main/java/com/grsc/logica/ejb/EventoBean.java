@@ -22,7 +22,7 @@ public class EventoBean implements EventoBeanRemote {
        
         boolean pudeCrear = false;
 
-        if ( buscarEvento(fechaHoraInicio, fechaHoraFin, titulo) != null  ) {
+        if ( buscarEvento(fechaHoraInicio, titulo) != null  ) {
             System.out.println("Evento con dicha documento ya registrado");
         } else {
             Evento jus = Evento.builder()
@@ -42,10 +42,21 @@ public class EventoBean implements EventoBeanRemote {
     }
 
     @Override
-    public Evento buscarEvento(Date fechaHoraInicio, Date fechaHoraFin, String titulo) {
-        return controlador.findEvento(fechaHoraInicio, fechaHoraFin, titulo);
+    public Evento buscarEvento(Date fechaHoraInicio, String titulo) {
+        return controlador.findEvento(fechaHoraInicio, titulo);
     }
 
+   @Override
+    public Evento buscarEvento( String titulo) {
+        return controlador.findEvento(titulo);
+    }
+
+    
+    @Override
+    public Evento buscarEventoPorId(BigInteger id) {
+        return controlador.findEvento(id);
+    }
+    
     @Override
     public Boolean eliminarEvento(BigInteger id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

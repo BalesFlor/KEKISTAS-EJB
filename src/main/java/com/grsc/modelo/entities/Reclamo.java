@@ -37,7 +37,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Reclamo.findAll", query = "SELECT r FROM Reclamo r"),
     @NamedQuery(name = "Reclamo.findByIdReclamo", query = "SELECT r FROM Reclamo r WHERE r.idReclamo = :idReclamo"),
     @NamedQuery(name = "Reclamo.findByFechaHora", query = "SELECT r FROM Reclamo r WHERE r.fechaHora = :fechaHora"),
-    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.fechaHora = :fechaHora AND r.titulo = :titulo"),
+    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findByDetalle", query = "SELECT r FROM Reclamo r WHERE r.detalle = :detalle"),
     @NamedQuery(name = "Reclamo.findByTitulo", query = "SELECT r FROM Reclamo r WHERE r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findBySemestre", query = "SELECT r FROM Reclamo r WHERE r.semestre = :semestre"),
@@ -67,6 +67,7 @@ public class Reclamo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_RECLAMO")
+    
     private BigInteger idReclamo;
     @Column(name = "SEMESTRE")
     private BigInteger semestre;
@@ -75,12 +76,11 @@ public class Reclamo implements Serializable {
     private Date fecha;
     @Column(name = "CREDITOS")
     private BigInteger creditos;
-    @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO")
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO", unique = false, nullable = true)
+    @ManyToOne
     private EstadoPeticion idEstadoPeticion;
-    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO")
-    @ManyToOne(optional = false)
-    @Nullable
+    @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO", unique = false, nullable = true)
+    @ManyToOne
     private Evento idEvento;
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
     @ManyToOne(optional = false)

@@ -4,16 +4,13 @@ import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Estudiante;
-import com.grsc.modelo.entities.AccionReclamo;
 import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Reclamo;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -103,13 +100,12 @@ public class ReclamoJpaController implements Serializable {
         }
     }
 
-    public Reclamo buscarReclamo(Estudiante est, Date fechaH, String tituloR) {
+    public Reclamo buscarReclamo(Estudiante est, String tituloR) {
         EntityManager em = getEntityManager();
         Reclamo reclamoRes = new Reclamo();
         try{
         List<Reclamo> listaResultado = em.createNamedQuery("Reclamo.findByIdUsuarioFecha")
                     .setParameter("idUsuario", est)
-                    .setParameter("fechaHora", fechaH)
                     .setParameter("titulo", tituloR)
                 .getResultList();
         if (!listaResultado.isEmpty()) {
