@@ -66,6 +66,7 @@ public class ReclamoJpaController implements Serializable {
 		em.merge(reclamo);
 		em.flush();
 	}
+    
 
     public List<Reclamo> findReclamoEntities() {
         return findReclamoEntities(true, -1, -1);

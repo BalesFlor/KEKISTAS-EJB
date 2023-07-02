@@ -89,5 +89,7 @@ public class EstudianteBean implements EstudianteBeanRemote{
     public List<Estudiante> listarEstudiantes() {
     return controlador.findEstudianteEntities();
     }
+
+
     
 }

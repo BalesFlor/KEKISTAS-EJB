@@ -21,6 +21,7 @@ public interface UsuarioBeanRemote {
             Departamento departamento, Itr itr, Localidad localidad, Roles rol) throws ParseException ;
     String imprimirUsuario(Usuarios user);
     Usuarios buscarUsuario(BigInteger id);
+    Usuarios buscarUserByNombre(String nomUser);
     Usuarios buscarUsuarioPorDocumento(String documento);
     Boolean validarLogin(String nomUser, String password);
     Usuarios usuarioLogeado(String nomUser, String password);

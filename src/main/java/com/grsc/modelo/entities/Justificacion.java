@@ -59,8 +59,8 @@ public class Justificacion implements Serializable {
     @NotNull
     @Column(name = "ID_JUSTIFICACION")
     private BigInteger idJustificacion;
-    @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO")
-    @ManyToOne(optional = false)
+     @JoinColumn(name = "ID_ESTADO_PETICION", referencedColumnName = "ID_ESTADO", unique = false, nullable = true)
+    @ManyToOne
     private EstadoPeticion idEstadoPeticion;
     @JoinColumn(name = "ID_EVENTO", referencedColumnName = "ID_EVENTO")
     @ManyToOne(optional = false)

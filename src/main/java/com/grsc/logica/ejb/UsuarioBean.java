@@ -61,6 +61,11 @@ public class UsuarioBean implements UsuarioBeanRemote {
     }
 
     @Override
+    public Usuarios buscarUserByNombre(String nomUser){
+        return controlador.findUsuarios(nomUser);
+    }
+    
+    @Override
     public Usuarios usuarioLogeado(String nomUser, String password) {
         return controlador.usuarioLogin(nomUser, password);
     }

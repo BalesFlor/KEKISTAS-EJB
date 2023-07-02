@@ -104,7 +104,7 @@ public class JustificacionJpaController implements Serializable {
         }
     }
     
-    public Justificacion findJustificacionUsuarioHoraEvento(Date fechaHora, BigInteger idEvento, BigInteger idUsuario){
+    public Justificacion findJustificacionUsuarioHoraEvento(Date fechaHora, Evento idEvento, Estudiante idUsuario){
         EntityManager em = getEntityManager();
         Justificacion justificacionRes = new Justificacion();
         try{

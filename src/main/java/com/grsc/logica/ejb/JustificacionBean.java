@@ -24,7 +24,7 @@ public class JustificacionBean implements JustificacionBeanRemote{
         
         boolean pudeCrear = false;
 
-        if ( buscarJustificacion( fechaHora, evento.getIdEvento(), usuario.getIdUsuario() ) != null  ) {
+        if ( existeJustificacion(fechaHora, evento, usuario) ) {
             System.out.println("Justificacion con dicha documento ya registrado");
         } else {
             Justificacion jus = Justificacion.builder()
@@ -45,10 +45,16 @@ public class JustificacionBean implements JustificacionBeanRemote{
     }
 
     @Override
-    public Justificacion buscarJustificacion(Date fechayHora, BigInteger idEvento, BigInteger idUser) {
-        return controlador.findJustificacionUsuarioHoraEvento(fechayHora, idEvento, idUser);
+    public Justificacion buscarJustificacion(Date fechayHora, Evento evento, Estudiante user) {
+        return controlador.findJustificacionUsuarioHoraEvento(fechayHora, evento, user);
     }
 
+    @Override
+    public Boolean existeJustificacion(Date fechayHora, Evento evento, Estudiante user) {
+        Justificacion jus = buscarJustificacion(fechayHora, evento, user);
+        return jus.getIdJustificacion()!=null;
+    }
+    
     @Override
     public Boolean eliminarJustificacion(BigInteger id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

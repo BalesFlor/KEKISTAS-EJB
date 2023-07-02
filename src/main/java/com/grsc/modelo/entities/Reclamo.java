@@ -1,6 +1,5 @@
 package com.grsc.modelo.entities;
 
-import com.sun.istack.Nullable;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;

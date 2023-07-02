@@ -3,10 +3,7 @@ package com.grsc.modelo.daos;
 import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.exceptions.PreexistingEntityException;
-import com.grsc.logica.ejb.AnalistaBean;
-import com.grsc.logica.ejb.DocenteBean;
 import com.grsc.logica.ejb.EstadoUsuarioBean;
-import com.grsc.logica.ejb.EstudianteBean;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -20,7 +17,6 @@ import com.grsc.modelo.entities.Itr;
 import com.grsc.modelo.entities.Localidad;
 import com.grsc.modelo.entities.Roles;
 import com.grsc.modelo.entities.Estudiante;
-import com.grsc.modelo.entities.Reclamo;
 import com.grsc.modelo.entities.Usuarios;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -262,6 +258,65 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
+    public Usuarios findUsuarios(String nomUser) {
+        EntityManager em = getEntityManager();
+        Usuarios user = null;
+        try{
+            List<Usuarios> listaResultado = em.createNamedQuery("Usuarios.findByNomUsuario")
+                    .setParameter("nomUsuario", nomUser)
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+
+                    BigInteger idUser = listaResultado.get(i).getIdUsuario();
+                    String nomUsuario = listaResultado.get(i).getNomUsuario();
+                    String nombre1 = listaResultado.get(i).getNombre1();
+                    String nombre2 = listaResultado.get(i).getNombre2();
+                    String apellido1 = listaResultado.get(i).getApellido1();
+                    String apellido2 = listaResultado.get(i).getApellido2();
+                    Date fecNac = listaResultado.get(i).getFecNac();
+                    String contrasenia = listaResultado.get(i).getContrasenia();
+                    char genero = listaResultado.get(i).getGenero();
+                    Localidad idLocal = listaResultado.get(i).getLocalidad();
+                    String mailConsti = listaResultado.get(i).getMailInstitucional();
+                    String mailPers = listaResultado.get(i).getMailPersonal();
+                    String telefono = listaResultado.get(i).getTelefono();
+                    String documento = listaResultado.get(i).getDocumento();
+                    Departamento idDepto = listaResultado.get(i).getDepartamento();
+                    Itr idItr = listaResultado.get(i).getItr();
+                    Roles idRol = listaResultado.get(i).getRol();
+                    EstadoUsuario idEstado=listaResultado.get(i).getIdEstadoUsuario();
+                    
+                    user = Usuarios.builder()
+                    .idUsuario(idUser)
+                    .nomUsuario(nomUsuario)
+                    .nombre1(nombre1)
+                    .nombre2(nombre2)
+                    .apellido1(apellido1)
+                    .apellido2(apellido2)
+                    .idEstadoUsuario(idEstado)
+                    .documento(documento)
+                    .telefono(telefono)
+                    .mailInstitucional(mailConsti)
+                    .mailPersonal(mailPers)
+                    .genero(genero)
+                    .fecNac(fecNac)
+                    .Itr(idItr)
+                    .departamento(idDepto)
+                    .Localidad(idLocal)
+                    .contrasenia(contrasenia)
+                    .Rol(idRol)
+                    .build();
+                }
+            }
+                                
+             return user;
+        }finally {
+            em.close();
+        }
+       
+    }
+    
     public int getUsuariosCount() {
         EntityManager em = getEntityManager();
         try {

@@ -86,4 +86,26 @@ public class ReclamoBean implements ReclamoBeanRemote {
         return rec.getIdReclamo()!=null;
         
     }
+    /*
+    @Override
+    public Boolean borrarReclamo(BigInteger id){          
+        boolean pudeEliminar = false;
+        Usuarios user =controlador.findUsuarios(id);
+        if (!(user==null)) {
+            try {
+                controlador.destroy(id);
+                pudeEliminar = true;
+            } catch (IllegalOrphanException ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+           System.out.println("Usuario con dicha ci no registrado");
+            
+        }
+        return pudeEliminar;
+
+    }
+*/
 }
