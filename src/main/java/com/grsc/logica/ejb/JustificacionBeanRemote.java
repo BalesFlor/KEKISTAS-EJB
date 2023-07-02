@@ -14,7 +14,7 @@ public interface JustificacionBeanRemote {
     Boolean hacerJustificacion(Date fechaHora, String detalle, Evento idEvento, Estudiante idUsuario) throws ParseException ;
     Justificacion buscarJustificacion(Date fechayHora, Evento evento, Estudiante user);
     Boolean existeJustificacion(Date fechayHora, Evento evento, Estudiante user);
-    Boolean eliminarJustificacion(BigInteger id);
     Boolean modificarJustificacion(BigInteger id);
     List<Justificacion> listarJustificacions();
+    Boolean borrarJustificacion(BigInteger id);
 }

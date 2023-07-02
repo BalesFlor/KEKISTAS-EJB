@@ -1,19 +1,15 @@
 package com.grsc.modelo.daos;
 
-import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Estudiante;
-import com.grsc.modelo.entities.AccionJustificacion;
 import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Justificacion;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -63,13 +59,16 @@ public class JustificacionJpaController implements Serializable {
     public void destroy(BigInteger id) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
         em.getTransaction().begin();
-       		Justificacion justificacion = em.find(Justificacion.class, id);
-		if (justificacion == null) {
-			throw new NonexistentEntityException("No existe la justificacion a borrar. Id=" + justificacion.getIdJustificacion());
-		}
-		em.merge(justificacion);
-		em.flush();
-	}
+
+        Justificacion justificacion = em.find(Justificacion.class, id);
+        if (justificacion == null) {
+            throw new NonexistentEntityException("No existe la justificacion a borrar. Id=" + justificacion.getIdJustificacion());
+        }
+        em.remove(justificacion);
+        em.getTransaction().commit();
+
+    }
+    
 
     public List<Justificacion> findJustificacionEntities() {
         return findJustificacionEntities(true, -1, -1);

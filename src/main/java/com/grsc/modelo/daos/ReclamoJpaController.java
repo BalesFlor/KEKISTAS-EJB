@@ -58,15 +58,17 @@ public class ReclamoJpaController implements Serializable {
 
     public void destroy(BigInteger id) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
-         em.getTransaction().begin();
-       		Reclamo reclamo = em.find(Reclamo.class, id);
-		if (reclamo == null) {
-			throw new NonexistentEntityException("No existe la reclamo a borrar. Id=" + reclamo.getIdReclamo());
-		}
-		em.merge(reclamo);
-		em.flush();
-	}
-    
+        em.getTransaction().begin();
+        Reclamo reclamo = em.find(Reclamo.class, id);
+        
+        if (reclamo == null) {
+            throw new NonexistentEntityException("No existe la reclamo a borrar. Id=" + id);
+        }else{
+            em.remove(reclamo);
+            em.getTransaction().commit();
+        }
+    }
+
 
     public List<Reclamo> findReclamoEntities() {
         return findReclamoEntities(true, -1, -1);

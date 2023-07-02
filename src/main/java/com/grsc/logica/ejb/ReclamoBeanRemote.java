@@ -15,4 +15,6 @@ public interface ReclamoBeanRemote {
    Boolean altaReclamoBasico(String titulo, String descripcion, Date fecha, Estudiante estudiante);
    Reclamo buscarReclamo(Estudiante estudiante, String titulo);
    Boolean existeReclamo(Estudiante estudiante, String titulo);
+   Boolean borrarReclamo(BigInteger id);
+   EstadoPeticion obtenerEstado(BigInteger id);
 }

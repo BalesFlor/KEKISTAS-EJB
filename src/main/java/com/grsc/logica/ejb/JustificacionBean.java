@@ -1,5 +1,6 @@
 package com.grsc.logica.ejb;
 
+import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.modelo.daos.JustificacionJpaController;
 import com.grsc.modelo.entities.Estudiante;
 import com.grsc.modelo.entities.Evento;
@@ -56,8 +57,21 @@ public class JustificacionBean implements JustificacionBeanRemote{
     }
     
     @Override
-    public Boolean eliminarJustificacion(BigInteger id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean borrarJustificacion(BigInteger id){          
+        boolean pudeEliminar = false;
+        Justificacion justificacion = controlador.findJustificacion(id);
+        if ( justificacion!=null ) {
+            try {
+                controlador.destroy(id);
+                pudeEliminar = true;
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(JustificacionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+           System.out.println("Justificacion con dicha ci no registrado");
+            
+        }
+        return pudeEliminar;
     }
 
     @Override

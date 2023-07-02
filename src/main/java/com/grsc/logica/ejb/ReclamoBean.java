@@ -1,9 +1,11 @@
 package com.grsc.logica.ejb;
 
+import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.modelo.daos.ReclamoJpaController;
 import com.grsc.modelo.entities.Estudiante;
 import com.grsc.modelo.entities.Reclamo;
 import com.grsc.modelo.entities.Evento;
+import com.grsc.modelo.entities.EstadoPeticion;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -86,26 +88,29 @@ public class ReclamoBean implements ReclamoBeanRemote {
         return rec.getIdReclamo()!=null;
         
     }
-    /*
+    
     @Override
     public Boolean borrarReclamo(BigInteger id){          
         boolean pudeEliminar = false;
-        Usuarios user =controlador.findUsuarios(id);
-        if (!(user==null)) {
+        Reclamo reclamo = controlador.findReclamo(id);
+        if ( reclamo!=null ) {
             try {
                 controlador.destroy(id);
                 pudeEliminar = true;
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NonexistentEntityException ex) {
-                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ReclamoBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-           System.out.println("Usuario con dicha ci no registrado");
+           System.out.println("Reclamo con dicha ci no registrado");
             
         }
         return pudeEliminar;
-
     }
-*/
+    
+    @Override
+    public EstadoPeticion obtenerEstado(BigInteger id) {
+        Reclamo reclamo = controlador.findReclamo(id);
+        return reclamo.getIdEstadoPeticion();
+    }
+
 }
