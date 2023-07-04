@@ -31,7 +31,8 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "AccionReclamo.findByFechaHora", query = "SELECT a FROM AccionReclamo a WHERE a.fechaHora = :fechaHora"),
     @NamedQuery(name = "AccionReclamo.findByDetalle", query = "SELECT a FROM AccionReclamo a WHERE a.detalle = :detalle"),
     @NamedQuery(name = "AccionReclamo.findByIdReclamo", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idReclamo = :idReclamo"),
-    @NamedQuery(name = "AccionReclamo.findByIdUsuario", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario")})
+    @NamedQuery(name = "AccionReclamo.findByIdUsuario", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario"),
+    @NamedQuery(name = "AccionReclamo.findByIdUsuarioFechaHora", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario AND a.fechaHora = :fechaHora")})
 public class AccionReclamo implements Serializable {
 
     @Basic(optional = false)
@@ -103,6 +104,14 @@ public class AccionReclamo implements Serializable {
 
     public void setReclamo(Reclamo reclamo) {
         this.reclamo = reclamo;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     @Override

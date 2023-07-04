@@ -12,12 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import static org.hibernate.criterion.Projections.id;
 
-/**
- *
- * @author fbale
- */
 public class AnalistaBean implements AnalistaBeanRemote{
      EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GRSCPU");
     private AnalistaJpaController controlador= new AnalistaJpaController(entityManagerFactory);
@@ -80,5 +75,9 @@ public class AnalistaBean implements AnalistaBeanRemote{
         return pudeEliminar;
 
     }
-    
+ 
+    @Override
+    public Analista buscarAnalista(BigInteger id){
+        return controlador.findAnalista(id);
+    } 
 }

@@ -4,6 +4,7 @@
  */
 package com.grsc.logica.ejb;
 
+import com.grsc.modelo.entities.Analista;
 import java.math.BigInteger;
 import javax.ejb.Remote;
 
@@ -16,4 +17,5 @@ public interface AnalistaBeanRemote {
     Boolean existeAnalista(BigInteger idUser);
     Boolean ingresarAnalista(BigInteger id);
     Boolean eliminarAnalista(BigInteger idUser);
+    Analista buscarAnalista(BigInteger id);
 }

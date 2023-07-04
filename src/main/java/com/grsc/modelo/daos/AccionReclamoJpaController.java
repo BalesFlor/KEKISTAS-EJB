@@ -11,6 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Analista;
 import com.grsc.modelo.entities.Reclamo;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -27,40 +29,15 @@ public class AccionReclamoJpaController implements Serializable {
     }
 
     public void create(AccionReclamo accionReclamo) throws PreexistingEntityException, Exception {
-        if (accionReclamo.getAccionReclamoPK() == null) {
-            accionReclamo.setAccionReclamoPK(new AccionReclamoPK());
-        }
-        accionReclamo.getAccionReclamoPK().setIdReclamo(accionReclamo.getReclamo().getIdReclamo());
-        accionReclamo.getAccionReclamoPK().setIdUsuario(accionReclamo.getAnalista().getIdUsuario());
-        EntityManager em = null;
+    EntityManager em = null;
+    
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Analista analista = accionReclamo.getAnalista();
-            if (analista != null) {
-                analista = em.getReference(analista.getClass(), analista.getIdUsuario());
-                accionReclamo.setAnalista(analista);
-            }
-            Reclamo reclamo = accionReclamo.getReclamo();
-            if (reclamo != null) {
-                reclamo = em.getReference(reclamo.getClass(), reclamo.getIdReclamo());
-                accionReclamo.setReclamo(reclamo);
-            }
+            
             em.persist(accionReclamo);
-            if (analista != null) {
-                analista.getAccionReclamoList().add(accionReclamo);
-                analista = em.merge(analista);
-            }
-            if (reclamo != null) {
-                reclamo.getAccionReclamoList().add(accionReclamo);
-                reclamo = em.merge(reclamo);
-            }
+            em.flush();
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAccionReclamo(accionReclamo.getAccionReclamoPK()) != null) {
-                throw new PreexistingEntityException("AccionReclamo " + accionReclamo + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -68,6 +45,15 @@ public class AccionReclamoJpaController implements Serializable {
         }
     }
 
+    public BigInteger obtenerId() {
+        String query = "SELECT ACC_REC_SEQ.nextVal() FROM dual";
+
+        EntityManager entityManager = getEntityManager();
+        Object result = entityManager.createNativeQuery(query).getSingleResult();
+        BigInteger nextVal = (BigInteger) result;
+        return nextVal;
+    }
+    
     public void edit(AccionReclamo accionReclamo) throws NonexistentEntityException, Exception {
         accionReclamo.getAccionReclamoPK().setIdReclamo(accionReclamo.getReclamo().getIdReclamo());
         accionReclamo.getAccionReclamoPK().setIdUsuario(accionReclamo.getAnalista().getIdUsuario());
@@ -181,6 +167,36 @@ public class AccionReclamoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             return em.find(AccionReclamo.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public AccionReclamo findAccionReclamo(Analista analista, Date fechaHora) {
+        EntityManager em = getEntityManager();
+        AccionReclamo accRecRes = new AccionReclamo();
+        try {
+            List<AccionReclamo> listaResultado = em.createNamedQuery("AccionReclamo.findByIdUsuarioFechaHora")
+                    .setParameter("idUsuario", analista)
+                    .setParameter("fechaHora", fechaHora)
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+
+                    AccionReclamoPK accRecPK = listaResultado.get(i).getAccionReclamoPK();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    Date fecha = listaResultado.get(i).getFechaHora();
+                    Analista analistaAcc = listaResultado.get(i).getAnalista();
+
+                    accRecRes = AccionReclamo.builder()
+                            .accionReclamoPK(accRecPK)
+                            .detalle(detalle)
+                            .fechaHora(fecha)
+                            .analista(analistaAcc)
+                            .build();
+                }
+            }
+            return accRecRes;
         } finally {
             em.close();
         }
