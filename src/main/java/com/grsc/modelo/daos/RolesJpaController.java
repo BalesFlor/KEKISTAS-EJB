@@ -3,6 +3,8 @@ package com.grsc.modelo.daos;
 import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.exceptions.PreexistingEntityException;
+import com.grsc.modelo.entities.Departamento;
+import com.grsc.modelo.entities.Itr;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -196,6 +198,33 @@ public class RolesJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+     public Roles findRol(String nombre) {
+        EntityManager em = getEntityManager();
+        Roles rolRes = new Roles();
+        try{
+        List<Roles> listaResultado = em.createNamedQuery("Itr.findByNomRol")
+                    .setParameter("nomRol", nombre)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idRol = listaResultado.get(i).getIdRol();               
+                    String nomRol = listaResultado.get(i).getNombre();
+                    
+                    
+                    
+                    rolRes = Roles.builder()
+                            .idRol(idRol)
+                            .nombre(nombre)
+                          
+                            .build();
+                }
+        }
+        return rolRes;
+        }finally {
+            em.close();
+        }        
     }
     
 }
