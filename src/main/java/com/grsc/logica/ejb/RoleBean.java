@@ -1,8 +1,11 @@
 package com.grsc.logica.ejb;
 
 import com.grsc.modelo.daos.RolesJpaController;
+import com.grsc.modelo.entities.Departamento;
+import com.grsc.modelo.entities.Itr;
 import com.grsc.modelo.entities.Roles;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,22 +27,29 @@ public class RoleBean implements RoleBeanRemote {
         return controlador.findRolesEntities();    
     }
 
-  
-    public Boolean altaRol(Roles rol) {
-    boolean pudeCrear = false;
+  @Override
+     public Boolean altaRol(String nombre) 
+        throws ParseException {
+        boolean altaITR = false;
 
-    if (existeRolByID(rol.getIdRol())) {
-        System.out.println("Rol con dicho ID ya existe");
-    } else {
-        try {
-            controlador.create(rol);
-            pudeCrear = true;
-        } catch (Exception ex) {
-            Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+        if (existeRolByNombre(nombre)) {
+            System.out.println("ITR con dicho ID ya registrado");
+        } else {
+            Roles rol = Roles.builder()
+            .nombre(nombre)
+            .build();
+                
+           
+        
+            try {
+                controlador.create(rol);
+                altaITR = true;
+            } catch (Exception ex) {
+                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        return altaITR;
     }
-    return pudeCrear;
-}
 
     public Boolean existeRolByID(BigInteger idRol) {
     Boolean existe = false;
@@ -50,6 +60,18 @@ public class RoleBean implements RoleBeanRemote {
     return existe;
 
     }
+    public Boolean existeRolByNombre(String nombre) {
+        Boolean existe = false;
+
+       Roles rol = controlador.findRol(nombre);
+        if (rol != null) {
+            existe = true;
+        }
+
+        return existe;
+    }
+
+
     
 }
 
