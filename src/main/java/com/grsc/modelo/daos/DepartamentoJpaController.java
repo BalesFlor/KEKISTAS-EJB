@@ -305,5 +305,30 @@ public class DepartamentoJpaController implements Serializable {
             em.close();
         }
     }
+    public Departamento findDepto(String nombre) {
+        EntityManager em = getEntityManager();
+        Departamento deptoRes = new Departamento();
+        try{
+        List<Departamento> listaResultado = em.createNamedQuery("Departamento.findByNomDepartamento")
+                    .setParameter("nomDepartamento", nombre)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+
+                    BigInteger idDepto = listaResultado.get(i).getIdDepartamento();
+                    String nombreDepto = listaResultado.get(i).getNomDepartamento();
+
+
+                    deptoRes = Departamento.builder()
+                           .idDepartamento(idDepto)
+                            .nomDepartamento(nombreDepto)
+                            .build();
+                }
+        }
+        return deptoRes;
+        }finally {
+            em.close();
+        }
+    } 
     
 }

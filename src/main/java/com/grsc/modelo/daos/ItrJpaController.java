@@ -9,10 +9,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Departamento;
+import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Itr;
+import com.grsc.modelo.entities.TipoEvento;
 import com.grsc.modelo.entities.Usuarios;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -196,7 +199,33 @@ public class ItrJpaController implements Serializable {
             em.close();
         }
     }
-
+    public Itr findItr(String nombre) {
+        EntityManager em = getEntityManager();
+        Itr itrRes = new Itr();
+        try{
+        List<Itr> listaResultado = em.createNamedQuery("Itr.findByNomItr")
+                    .setParameter("nomItr", nombre)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idItr = listaResultado.get(i).getIdItr();               
+                    String nomItr = listaResultado.get(i).getNomItr();
+                    Departamento departamento = listaResultado.get(i).getIdDepartamento();
+                    
+                    
+                    itrRes = Itr.builder()
+                            .idItr(idItr)
+                            .nomItr(nomItr)
+                            .idDepartamento(departamento)
+                            .build();
+                }
+        }
+        return itrRes;
+        }finally {
+            em.close();
+        }        
+    }
     public Itr findByIDItr(BigInteger idITR) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

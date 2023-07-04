@@ -8,5 +8,6 @@ import javax.ejb.Remote;
 @Remote
 public interface DepartamentoBeanRemote {
     List<Departamento> listarDepartamento();
+    Departamento buscarDeptobyNombre(String nombre);
     Departamento buscarDepto(BigInteger id);
 }

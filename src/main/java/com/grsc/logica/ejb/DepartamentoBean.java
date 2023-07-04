@@ -20,4 +20,9 @@ public class DepartamentoBean implements DepartamentoBeanRemote{
     public Departamento buscarDepto(BigInteger id) {
         return controlador.findDepartamento(id);
     }
+
+    @Override
+    public Departamento buscarDeptobyNombre(String nombre) {
+       return controlador.findDepto(nombre);
+    }
 }
