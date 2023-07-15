@@ -30,7 +30,8 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "AccionJustificacion.findByFechaHora", query = "SELECT a FROM AccionJustificacion a WHERE a.fechaHora = :fechaHora"),
     @NamedQuery(name = "AccionJustificacion.findByDetalle", query = "SELECT a FROM AccionJustificacion a WHERE a.detalle = :detalle"),
     @NamedQuery(name = "AccionJustificacion.findByIdJustificacion", query = "SELECT a FROM AccionJustificacion a WHERE a.accionJustificacionPK.idJustificacion = :idJustificacion"),
-    @NamedQuery(name = "AccionJustificacion.findByIdUsuario", query = "SELECT a FROM AccionJustificacion a WHERE a.accionJustificacionPK.idUsuario = :idUsuario")})
+    @NamedQuery(name = "AccionJustificacion.findByIdUsuario", query = "SELECT a FROM AccionJustificacion a WHERE a.accionJustificacionPK.idUsuario = :idUsuario"),
+    @NamedQuery(name = "AccionJustificacion.findByIdUsuarioFechaHora", query = "SELECT a FROM AccionJustificacion a WHERE a.accionJustificacionPK.idUsuario = :idUsuario AND a.fechaHora = :fechaHora")})
 public class AccionJustificacion implements Serializable {
 
     @Basic(optional = false)
@@ -96,6 +97,14 @@ public class AccionJustificacion implements Serializable {
         this.analista = analista;
     }
 
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+    
     public Justificacion getJustificacion() {
         return justificacion;
     }

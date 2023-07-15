@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Analista;
 import com.grsc.modelo.entities.Justificacion;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -185,6 +186,37 @@ public class AccionJustificacionJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public AccionJustificacion findAccionJustificacion(Analista analista, Date fechaHora) {
+        EntityManager em = getEntityManager();
+        AccionJustificacion accJusRes = new AccionJustificacion();
+        try {
+            List<AccionJustificacion> listaResultado = em.createNamedQuery("AccionJustificacion.findByIdUsuarioFechaHora")
+                    .setParameter("idUsuario", analista)
+                    .setParameter("fechaHora", fechaHora)
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+
+                    AccionJustificacionPK accRecPK = listaResultado.get(i).getAccionJustificacionPK();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    Date fecha = listaResultado.get(i).getFechaHora();
+                    Analista analistaAcc = listaResultado.get(i).getAnalista();
+
+                    accJusRes = AccionJustificacion.builder()
+                            .accionJustificacionPK(accRecPK)
+                            .detalle(detalle)
+                            .fechaHora(fecha)
+                            .analista(analistaAcc)
+                            .build();
+                }
+            }
+            return accJusRes;
+        } finally {
+            em.close();
+        }
+    }
+
 
     public int getAccionJustificacionCount() {
         EntityManager em = getEntityManager();

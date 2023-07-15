@@ -32,7 +32,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "AccionReclamo.findByDetalle", query = "SELECT a FROM AccionReclamo a WHERE a.detalle = :detalle"),
     @NamedQuery(name = "AccionReclamo.findByIdReclamo", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idReclamo = :idReclamo"),
     @NamedQuery(name = "AccionReclamo.findByIdUsuario", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario"),
-    @NamedQuery(name = "AccionReclamo.findByIdUsuarioFechaHora", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario AND a.fechaHora = :fechaHora")})
+    @NamedQuery(name = "AccionReclamo.findByIdUsuarioIdReclamo", query = "SELECT a FROM AccionReclamo a WHERE a.accionReclamoPK.idUsuario = :idUsuario AND a.accionReclamoPK.idReclamo = :idReclamo")})
 public class AccionReclamo implements Serializable {
 
     @Basic(optional = false)

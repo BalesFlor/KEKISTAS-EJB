@@ -40,8 +40,32 @@ public class AccionReclamoBean implements AccionReclamoBeanRemote {
     }
 
     @Override
-    public AccionReclamo buscarAccionReclamo(Analista analista, Date fechaHora){
-        return controlador.findAccionReclamo(analista, fechaHora);
+    public AccionReclamo buscarAccionReclamo(Reclamo reclamo, Analista analista){
+        return controlador.findAccionReclamo(reclamo, analista);
     }
     
+    @Override
+    public Boolean modificarAccion(Reclamo reclamo, Analista analista, String detalle, Date fechaHora){
+    
+        boolean pudeModificar = false;
+        AccionReclamoPK accRecPK = new AccionReclamoPK(reclamo.getIdReclamo(), analista.getIdUsuario());
+        
+            AccionReclamo accRec = AccionReclamo.builder()
+                    .accionReclamoPK(accRecPK)
+                    .reclamo(reclamo)
+                    .analista(analista)
+                    .detalle(detalle)
+                    .fechaHora(fechaHora)
+                    .build();
+
+            try {
+                controlador.edit(accRec);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        return pudeModificar;
+        
+    }
 }

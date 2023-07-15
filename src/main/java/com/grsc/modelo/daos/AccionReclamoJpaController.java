@@ -172,13 +172,13 @@ public class AccionReclamoJpaController implements Serializable {
         }
     }
     
-    public AccionReclamo findAccionReclamo(Analista analista, Date fechaHora) {
+    public AccionReclamo findAccionReclamo(Reclamo reclamo, Analista analista) {
         EntityManager em = getEntityManager();
         AccionReclamo accRecRes = new AccionReclamo();
         try {
-            List<AccionReclamo> listaResultado = em.createNamedQuery("AccionReclamo.findByIdUsuarioFechaHora")
-                    .setParameter("idUsuario", analista)
-                    .setParameter("fechaHora", fechaHora)
+            List<AccionReclamo> listaResultado = em.createNamedQuery("AccionReclamo.findByIdUsuarioIdReclamo")
+                    .setParameter("idUsuario", analista.getIdUsuario())
+                    .setParameter("idReclamo", reclamo.getIdReclamo())
                     .getResultList();
             if (!listaResultado.isEmpty()) {
                 for (int i = 0; i < listaResultado.size(); i++) {
