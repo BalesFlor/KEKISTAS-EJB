@@ -7,5 +7,6 @@ import java.util.Date;
 
 public interface AccionJustificacionBeanRemote {
     Boolean registrarAccion(Justificacion justificacion, Analista analista, String detalle, Date fechaHora);
-    AccionJustificacion buscarAccionJustificacion(Analista analista, Date FechaHora);
+    AccionJustificacion buscarAccionJustificacion(Justificacion justificacion, Analista analista);
+    Boolean modificarAccion(Justificacion justificacion, Analista analista, String detalle, Date fechaHora);
 }

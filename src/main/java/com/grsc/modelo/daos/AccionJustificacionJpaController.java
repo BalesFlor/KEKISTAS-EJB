@@ -28,40 +28,15 @@ public class AccionJustificacionJpaController implements Serializable {
     }
 
     public void create(AccionJustificacion accionJustificacion) throws PreexistingEntityException, Exception {
-        if (accionJustificacion.getAccionJustificacionPK() == null) {
-            accionJustificacion.setAccionJustificacionPK(new AccionJustificacionPK());
-        }
-        accionJustificacion.getAccionJustificacionPK().setIdJustificacion(accionJustificacion.getJustificacion().getIdJustificacion());
-        accionJustificacion.getAccionJustificacionPK().setIdUsuario(accionJustificacion.getAnalista().getIdUsuario());
-        EntityManager em = null;
+         EntityManager em = null;
+    
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Analista analista = accionJustificacion.getAnalista();
-            if (analista != null) {
-                analista = em.getReference(analista.getClass(), analista.getIdUsuario());
-                accionJustificacion.setAnalista(analista);
-            }
-            Justificacion justificacion = accionJustificacion.getJustificacion();
-            if (justificacion != null) {
-                justificacion = em.getReference(justificacion.getClass(), justificacion.getIdJustificacion());
-                accionJustificacion.setJustificacion(justificacion);
-            }
+            
             em.persist(accionJustificacion);
-            if (analista != null) {
-                analista.getAccionJustificacionList().add(accionJustificacion);
-                analista = em.merge(analista);
-            }
-            if (justificacion != null) {
-                justificacion.getAccionJustificacionList().add(accionJustificacion);
-                justificacion = em.merge(justificacion);
-            }
+            em.flush();
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAccionJustificacion(accionJustificacion.getAccionJustificacionPK()) != null) {
-                throw new PreexistingEntityException("AccionJustificacion " + accionJustificacion + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -198,13 +173,43 @@ public class AccionJustificacionJpaController implements Serializable {
             if (!listaResultado.isEmpty()) {
                 for (int i = 0; i < listaResultado.size(); i++) {
 
-                    AccionJustificacionPK accRecPK = listaResultado.get(i).getAccionJustificacionPK();
+                    AccionJustificacionPK accJusPK = listaResultado.get(i).getAccionJustificacionPK();
                     String detalle = listaResultado.get(i).getDetalle();
                     Date fecha = listaResultado.get(i).getFechaHora();
                     Analista analistaAcc = listaResultado.get(i).getAnalista();
 
                     accJusRes = AccionJustificacion.builder()
-                            .accionJustificacionPK(accRecPK)
+                            .accionJustificacionPK(accJusPK)
+                            .detalle(detalle)
+                            .fechaHora(fecha)
+                            .analista(analistaAcc)
+                            .build();
+                }
+            }
+            return accJusRes;
+        } finally {
+            em.close();
+        }
+    }
+
+     public AccionJustificacion findAccionJustificacion(Justificacion justificacion, Analista analista) {
+        EntityManager em = getEntityManager();
+        AccionJustificacion accJusRes = new AccionJustificacion();
+        try {
+            List<AccionJustificacion> listaResultado = em.createNamedQuery("AccionJustificacion.findByIdUsuarioIdJustificacion")
+                    .setParameter("idUsuario", analista.getIdUsuario())
+                    .setParameter("idJustificacion", justificacion.getIdJustificacion())
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+
+                    AccionJustificacionPK accJusPK = listaResultado.get(i).getAccionJustificacionPK();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    Date fecha = listaResultado.get(i).getFechaHora();
+                    Analista analistaAcc = listaResultado.get(i).getAnalista();
+
+                    accJusRes = AccionJustificacion.builder()
+                            .accionJustificacionPK(accJusPK)
                             .detalle(detalle)
                             .fechaHora(fecha)
                             .analista(analistaAcc)

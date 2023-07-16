@@ -107,7 +107,7 @@ public class ReclamoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         Reclamo reclamoRes = new Reclamo();
         try{
-        List<Reclamo> listaResultado = em.createNamedQuery("Reclamo.findByIdUsuarioFecha")
+        List<Reclamo> listaResultado = em.createNamedQuery("Reclamo.findByIdUsuarioTitulo")
                     .setParameter("idUsuario", est)
                     .setParameter("titulo", tituloR)
                 .getResultList();

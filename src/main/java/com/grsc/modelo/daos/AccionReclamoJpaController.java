@@ -45,15 +45,6 @@ public class AccionReclamoJpaController implements Serializable {
         }
     }
 
-    public BigInteger obtenerId() {
-        String query = "SELECT ACC_REC_SEQ.nextVal() FROM dual";
-
-        EntityManager entityManager = getEntityManager();
-        Object result = entityManager.createNativeQuery(query).getSingleResult();
-        BigInteger nextVal = (BigInteger) result;
-        return nextVal;
-    }
-    
     public void edit(AccionReclamo accionReclamo) throws NonexistentEntityException, Exception {
         accionReclamo.getAccionReclamoPK().setIdReclamo(accionReclamo.getReclamo().getIdReclamo());
         accionReclamo.getAccionReclamoPK().setIdUsuario(accionReclamo.getAnalista().getIdUsuario());

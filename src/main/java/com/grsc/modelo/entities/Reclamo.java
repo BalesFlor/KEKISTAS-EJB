@@ -36,7 +36,7 @@ import lombok.AllArgsConstructor;
     @NamedQuery(name = "Reclamo.findAll", query = "SELECT r FROM Reclamo r"),
     @NamedQuery(name = "Reclamo.findByIdReclamo", query = "SELECT r FROM Reclamo r WHERE r.idReclamo = :idReclamo"),
     @NamedQuery(name = "Reclamo.findByFechaHora", query = "SELECT r FROM Reclamo r WHERE r.fechaHora = :fechaHora"),
-    @NamedQuery(name = "Reclamo.findByIdUsuarioFecha", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.titulo = :titulo"),
+    @NamedQuery(name = "Reclamo.findByIdUsuarioTitulo", query = "SELECT r FROM Reclamo r WHERE r.idUsuario = :idUsuario AND r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findByDetalle", query = "SELECT r FROM Reclamo r WHERE r.detalle = :detalle"),
     @NamedQuery(name = "Reclamo.findByTitulo", query = "SELECT r FROM Reclamo r WHERE r.titulo = :titulo"),
     @NamedQuery(name = "Reclamo.findBySemestre", query = "SELECT r FROM Reclamo r WHERE r.semestre = :semestre"),
