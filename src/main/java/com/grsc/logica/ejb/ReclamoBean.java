@@ -113,4 +113,38 @@ public class ReclamoBean implements ReclamoBeanRemote {
         return reclamo.getIdEstadoPeticion();
     }
 
+    @Override
+    public Reclamo buscarReclamoPorId(BigInteger id) {
+         return controlador.findReclamo(id);
+    }
+
+    @Override
+    public Boolean modificarEstado(Reclamo rec, EstadoPeticion estado, Date fechaHora)throws Exception{
+        
+        boolean pudeModificar = false;
+            Reclamo reclamo = Reclamo.builder()
+                    .idReclamo(rec.getIdReclamo())
+                    .idUsuario(rec.getIdUsuario())
+                    .idEvento(rec.getIdEvento())
+                    .detalle(rec.getDetalle())
+                    .idEstadoPeticion(estado)
+                    .fechaHora(fechaHora)
+                    .build();
+
+            try {
+                controlador.edit(reclamo);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        return pudeModificar;
+        
+    }
+    
+    @Override
+    public Reclamo buscarReclamo(Date fechayHora, Evento evento, Estudiante user) {
+        return controlador.findReclamoUsuarioHoraEvento(fechayHora, evento, user);
+    }
+
 }

@@ -7,4 +7,5 @@ import java.util.List;
 public interface EstadoUsuarioBeanRemote {
     List<EstadoUsuario> listarEstadosUsuario();
     EstadoUsuario buscar(BigInteger id);
+    
 }

@@ -43,18 +43,15 @@ public class ReclamoJpaController implements Serializable {
         }
     }
 
-    public void edit(Reclamo reclamo) throws IllegalOrphanException, NonexistentEntityException, Exception {
-         EntityManager em = null;
-        
-		try { 
-                    em = getEntityManager();
-                    em.getTransaction().begin();
-                    em.merge(reclamo);
-                    em.flush();
-		} catch (Exception e) {
-			throw new Exception("No se pudo modificar el reclamo" + e.getMessage(), e);
-		}
+     public void edit(Reclamo reclamo) throws Exception {
+        EntityManager em = null;
+        em = getEntityManager();
+        em.getTransaction().begin();
+        em.merge(reclamo);
+        em.getTransaction().commit();
+        em.close();
     }
+
 
     public void destroy(BigInteger id) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
@@ -158,4 +155,40 @@ public class ReclamoJpaController implements Serializable {
         }
     }
     
+     public Reclamo findReclamoUsuarioHoraEvento(Date fechaHora, Evento idEvento, Estudiante idUsuario){
+        EntityManager em = getEntityManager();
+        Reclamo reclamoRes = new Reclamo();
+        try{
+        List<Reclamo> listaResultado = em.createNamedQuery("Reclamo.findByHoraEventoUsuario")
+                    .setParameter("fechaHora", fechaHora)
+                    .setParameter("idEvento", idEvento)
+                    .setParameter("idUsuario", idUsuario)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idJus = listaResultado.get(i).getIdReclamo();
+                    Date fechayHora = listaResultado.get(i).getFechaHora();
+                    Evento evento = listaResultado.get(i).getIdEvento();
+                    Estudiante estudiante = listaResultado.get(i).getIdUsuario();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    EstadoPeticion estado = listaResultado.get(i).getIdEstadoPeticion();
+                    
+                    
+                    reclamoRes = Reclamo.builder()
+                            .idReclamo(idJus)
+                            .idEvento(evento)
+                            .idUsuario(estudiante)
+                            .fechaHora(fechayHora)
+                            .idEstadoPeticion(estado)
+                            .detalle(detalle)
+                            .build();
+                }
+        }
+        return reclamoRes;
+        }finally {
+            em.close();
+        }        
+    }
+
 }

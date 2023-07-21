@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.grsc.logica.ejb;
 
 import com.grsc.modelo.daos.EstadoPeticionJpaController;
@@ -11,10 +7,6 @@ import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- *
- * @author fbale
- */
 public class EstadoPeticionBean implements EstadoPeticionBeanRemote{
     
     EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GRSCPU");
@@ -28,5 +20,10 @@ public class EstadoPeticionBean implements EstadoPeticionBeanRemote{
     @Override
     public EstadoPeticion buscar(BigInteger id) {
         return controlador.findEstadoPeticion(id);
+    }
+
+    @Override
+    public EstadoPeticion buscarPorNom(String nom){
+        return controlador.findEstadoPeticion(nom);
     }
 }

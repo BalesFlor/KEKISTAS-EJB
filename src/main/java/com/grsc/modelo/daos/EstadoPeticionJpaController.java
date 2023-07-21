@@ -120,6 +120,32 @@ public class EstadoPeticionJpaController implements Serializable {
         }
     }
 
+     public EstadoPeticion findEstadoPeticion(String nombre) {
+        EntityManager em = getEntityManager();
+        EstadoPeticion estadoRes = new EstadoPeticion();
+        try {
+            List<EstadoPeticion> listaResultado = em.createNamedQuery("EstadoPeticion.findByNomEstado")
+                    .setParameter("nomEstado", nombre)
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger id = listaResultado.get(i).getIdEstado();
+                    String nom = listaResultado.get(i).getNomEstado();
+
+                    estadoRes = EstadoPeticion.builder()
+                            .idEstado(id)
+                            .nomEstado(nom)
+                            .build();
+                }
+            }
+            return estadoRes;
+        } finally {
+            em.close();
+        }
+    }
+
+    
     public int getEstadoPeticionCount() {
         EntityManager em = getEntityManager();
         try {

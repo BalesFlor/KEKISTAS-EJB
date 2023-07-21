@@ -1,5 +1,6 @@
 package com.grsc.logica.ejb;
 
+import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Estudiante;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Justificacion;
@@ -17,4 +18,6 @@ public interface JustificacionBeanRemote {
     Boolean modificarJustificacion(BigInteger id);
     List<Justificacion> listarJustificacions();
     Boolean borrarJustificacion(BigInteger id);
+    Boolean modificarEstado(Justificacion jus, EstadoPeticion estado, Date fechaHora)throws Exception;
+    Justificacion buscarJustificacionPorId(BigInteger id);
 }

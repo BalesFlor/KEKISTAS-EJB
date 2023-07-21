@@ -2,6 +2,7 @@ package com.grsc.logica.ejb;
 
 import com.grsc.exceptions.NonexistentEntityException;
 import com.grsc.modelo.daos.JustificacionJpaController;
+import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Estudiante;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Justificacion;
@@ -78,10 +79,40 @@ public class JustificacionBean implements JustificacionBeanRemote{
     public Boolean modificarJustificacion(BigInteger id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public Justificacion buscarJustificacionPorId(BigInteger id) {
+         return controlador.findJustificacion(id);
+    }
+
+    @Override
+    public Boolean modificarEstado(Justificacion jus, EstadoPeticion estado, Date fechaHora)throws Exception{
+        
+        boolean pudeModificar = false;
+            Justificacion justificacion = Justificacion.builder()
+                    .idJustificacion(jus.getIdJustificacion())
+                    .idUsuario(jus.getIdUsuario())
+                    .idEvento(jus.getIdEvento())
+                    .detalle(jus.getDetalle())
+                    .idEstadoPeticion(estado)
+                    .fechaHora(fechaHora)
+                    .build();
+
+            try {
+                controlador.edit(justificacion);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        return pudeModificar;
+        
+    }
 
     @Override
     public List<Justificacion> listarJustificacions() {
         return controlador.findJustificacionEntities();
     }
+
     
 }

@@ -44,16 +44,12 @@ public class JustificacionJpaController implements Serializable {
 
     public void edit(Justificacion justificacion) throws Exception {
         EntityManager em = null;
-        
-		try { 
-                    em = getEntityManager();
-                    em.getTransaction().begin();
-                    em.merge(justificacion);
-                    em.flush();
-		} catch (Exception e) {
-			throw new Exception("No se pudo modificar la modificacion" + e.getMessage(), e);
-		}
-	}
+        em = getEntityManager();
+        em.getTransaction().begin();
+        em.merge(justificacion);
+        em.getTransaction().commit();
+        em.close();
+    }
 
 
     public void destroy(BigInteger id) throws NonexistentEntityException {
@@ -121,8 +117,7 @@ public class JustificacionJpaController implements Serializable {
                     Estudiante estudiante = listaResultado.get(i).getIdUsuario();
                     String detalle = listaResultado.get(i).getDetalle();
                     EstadoPeticion estado = listaResultado.get(i).getIdEstadoPeticion();
-                    
-                    
+                   
                     justificacionRes = Justificacion.builder()
                             .idJustificacion(idJus)
                             .idEvento(evento)
