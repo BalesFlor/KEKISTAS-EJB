@@ -127,6 +127,7 @@ public class ReclamoBean implements ReclamoBeanRemote {
                     .idUsuario(rec.getIdUsuario())
                     .idEvento(rec.getIdEvento())
                     .detalle(rec.getDetalle())
+                    .titulo(rec.getTitulo())
                     .idEstadoPeticion(estado)
                     .fechaHora(fechaHora)
                     .build();

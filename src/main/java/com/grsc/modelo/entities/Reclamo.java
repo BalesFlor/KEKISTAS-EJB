@@ -55,9 +55,8 @@ public class Reclamo implements Serializable {
     @Column(name = "DETALLE")
     private String detalle;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "TITULO")
+    @Column(name = "TITULO", nullable = false)
     private String titulo;
 
     private static final long serialVersionUID = 1L;
@@ -224,7 +223,7 @@ public class Reclamo implements Serializable {
 
     @Override
     public String toString() {
-        return "com.grsc.modelo.entities.Reclamo[ idReclamo=" + idReclamo + " ]";
+        return "com.grsc.modelo.entities.Reclamo[ idReclamo=" + idReclamo + ", titulo=" + titulo + " ]";
     }
 
 }

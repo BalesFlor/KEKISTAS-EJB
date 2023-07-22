@@ -3,7 +3,6 @@ package com.grsc.modelo.entities;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

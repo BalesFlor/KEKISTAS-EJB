@@ -43,14 +43,21 @@ public class ReclamoJpaController implements Serializable {
         }
     }
 
-     public void edit(Reclamo reclamo) throws Exception {
-        EntityManager em = null;
-        em = getEntityManager();
+    public void edit(Reclamo reclamo) throws Exception {
+    EntityManager em = getEntityManager();
+
+    try {
         em.getTransaction().begin();
         em.merge(reclamo);
         em.getTransaction().commit();
+    } catch (Exception ex) {
+        em.getTransaction().rollback();
+        throw ex;
+    } finally {
         em.close();
     }
+}
+
 
 
     public void destroy(BigInteger id) throws NonexistentEntityException {
