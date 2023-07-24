@@ -194,4 +194,46 @@ public class UsuarioBean implements UsuarioBeanRemote {
         Usuarios user = controlador.findUsuarios(id);
         return user.getIdEstadoUsuario();
     }
+    
+    public Boolean editarUser (Usuarios user, Departamento Departamento, Localidad Localidad, String Telefono, String MailPersonal, String Contrasenia) {
+
+        user.setDepartamento(Departamento);
+        user.setLocalidad(Localidad);        
+        user.setTelefono(Telefono);
+        user.setMailPersonal(MailPersonal);
+        user.setContrasenia(Contrasenia);
+        Boolean pudeEditar = false;
+        try {
+            controlador.edit(user);
+            pudeEditar = true;
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pudeEditar;
+    }
+
+    public Boolean editarUser(Usuarios user, Roles Rol, String Documento, String Nombre1, String Nombre2, String Apellido1, String Apellido2, Itr Itr, String MailInstitucional, char Genero, Date FecNac) {
+        user.setRol(Rol);
+        user.setDocumento(Documento);
+        user.setNombre1(Nombre1);
+        user.setNombre2(Nombre2);
+        user.setApellido1(Apellido1);
+        user.setApellido2(Apellido2);
+        user.setItr(Itr);
+        user.setMailInstitucional(MailInstitucional);
+        user.setGenero(Genero);
+        user.setFecNac(FecNac);
+        Boolean pudeEditar = false;
+        try {
+            controlador.edit(user);
+            pudeEditar = true;
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return pudeEditar;
+    }
 }

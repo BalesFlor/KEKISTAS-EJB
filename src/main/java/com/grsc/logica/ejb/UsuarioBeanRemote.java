@@ -26,6 +26,7 @@ public interface UsuarioBeanRemote {
     Boolean validarLogin(String nomUser, String password);
     Usuarios usuarioLogeado(String nomUser, String password);
     Roles mostrarRolUsuario(BigInteger id);
+    Boolean editarUser(Usuarios user, Roles Rol, String Documento, String Nombre1, String Nombre2, String Apellido1, String Apellido2, Itr Itr, String MailInstitucional, char Genero, Date FecNac);
     Usuarios obtenerPorCI(String documento);
     Boolean existeUserByDoc(String documento);
     Boolean eliminarUser(BigInteger id);

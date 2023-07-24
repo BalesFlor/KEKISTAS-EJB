@@ -57,131 +57,7 @@ public class UsuariosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuarios persistentUsuarios = em.find(Usuarios.class, usuarios.getIdUsuario());
-            Tutor tutorOld = persistentUsuarios.getTutor();
-            Tutor tutorNew = usuarios.getTutor();
-            Analista analistaOld = persistentUsuarios.getAnalista();
-            Analista analistaNew = usuarios.getAnalista();
-            Departamento idDepartamentoOld = persistentUsuarios.getDepartamento();
-            Departamento idDepartamentoNew = usuarios.getDepartamento();
-            Itr idItrOld = persistentUsuarios.getItr();
-            Itr idItrNew = usuarios.getItr();
-            Localidad idLocalidadOld = persistentUsuarios.getLocalidad();
-            Localidad idLocalidadNew = usuarios.getLocalidad();
-            Roles idRolOld = persistentUsuarios.getRol();
-            Roles idRolNew = usuarios.getRol();
-            Estudiante estudianteOld = persistentUsuarios.getEstudiante();
-            Estudiante estudianteNew = usuarios.getEstudiante();
-            List<String> illegalOrphanMessages = null;
-            if (tutorOld != null && !tutorOld.equals(tutorNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Tutor " + tutorOld + " since its usuarios field is not nullable.");
-            }
-            if (analistaOld != null && !analistaOld.equals(analistaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Analista " + analistaOld + " since its usuarios field is not nullable.");
-            }
-            if (estudianteOld != null && !estudianteOld.equals(estudianteNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Estudiante " + estudianteOld + " since its usuarios field is not nullable.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (tutorNew != null) {
-                tutorNew = em.getReference(tutorNew.getClass(), tutorNew.getIdUsuario());
-                usuarios.setTutor(tutorNew);
-            }
-            if (analistaNew != null) {
-                analistaNew = em.getReference(analistaNew.getClass(), analistaNew.getIdUsuario());
-                usuarios.setAnalista(analistaNew);
-            }
-            if (idDepartamentoNew != null) {
-                idDepartamentoNew = em.getReference(idDepartamentoNew.getClass(), idDepartamentoNew.getIdDepartamento());
-                usuarios.setDepartamento(idDepartamentoNew);
-            }
-            if (idItrNew != null) {
-                idItrNew = em.getReference(idItrNew.getClass(), idItrNew.getIdItr());
-                usuarios.setItr(idItrNew);
-            }
-            if (idLocalidadNew != null) {
-                idLocalidadNew = em.getReference(idLocalidadNew.getClass(), idLocalidadNew.getIdLocalidad());
-                usuarios.setLocalidad(idLocalidadNew);
-            }
-            if (idRolNew != null) {
-                idRolNew = em.getReference(idRolNew.getClass(), idRolNew.getIdRol());
-                usuarios.setRol(idRolNew);
-            }
-            if (estudianteNew != null) {
-                estudianteNew = em.getReference(estudianteNew.getClass(), estudianteNew.getIdUsuario());
-                usuarios.setEstudiante(estudianteNew);
-            }
             usuarios = em.merge(usuarios);
-            if (tutorNew != null && !tutorNew.equals(tutorOld)) {
-                Usuarios oldUsuariosOfTutor = tutorNew.getUsuarios();
-                if (oldUsuariosOfTutor != null) {
-                    oldUsuariosOfTutor.setTutor(null);
-                    oldUsuariosOfTutor = em.merge(oldUsuariosOfTutor);
-                }
-                tutorNew.setUsuarios(usuarios);
-                tutorNew = em.merge(tutorNew);
-            }
-            if (analistaNew != null && !analistaNew.equals(analistaOld)) {
-                Usuarios oldUsuariosOfAnalista = analistaNew.getUsuarios();
-                if (oldUsuariosOfAnalista != null) {
-                    oldUsuariosOfAnalista.setAnalista(null);
-                    oldUsuariosOfAnalista = em.merge(oldUsuariosOfAnalista);
-                }
-                analistaNew.setUsuarios(usuarios);
-                analistaNew = em.merge(analistaNew);
-            }
-            if (idDepartamentoOld != null && !idDepartamentoOld.equals(idDepartamentoNew)) {
-                idDepartamentoOld.getUsuariosList().remove(usuarios);
-                idDepartamentoOld = em.merge(idDepartamentoOld);
-            }
-            if (idDepartamentoNew != null && !idDepartamentoNew.equals(idDepartamentoOld)) {
-                idDepartamentoNew.getUsuariosList().add(usuarios);
-                idDepartamentoNew = em.merge(idDepartamentoNew);
-            }
-            if (idItrOld != null && !idItrOld.equals(idItrNew)) {
-                idItrOld.getUsuariosList().remove(usuarios);
-                idItrOld = em.merge(idItrOld);
-            }
-            if (idItrNew != null && !idItrNew.equals(idItrOld)) {
-                idItrNew.getUsuariosList().add(usuarios);
-                idItrNew = em.merge(idItrNew);
-            }
-            if (idLocalidadOld != null && !idLocalidadOld.equals(idLocalidadNew)) {
-                idLocalidadOld.getUsuariosList().remove(usuarios);
-                idLocalidadOld = em.merge(idLocalidadOld);
-            }
-            if (idLocalidadNew != null && !idLocalidadNew.equals(idLocalidadOld)) {
-                idLocalidadNew.getUsuariosList().add(usuarios);
-                idLocalidadNew = em.merge(idLocalidadNew);
-            }
-            if (idRolOld != null && !idRolOld.equals(idRolNew)) {
-                idRolOld.getUsuariosList().remove(usuarios);
-                idRolOld = em.merge(idRolOld);
-            }
-            if (idRolNew != null && !idRolNew.equals(idRolOld)) {
-                idRolNew.getUsuariosList().add(usuarios);
-                idRolNew = em.merge(idRolNew);
-            }
-            if (estudianteNew != null && !estudianteNew.equals(estudianteOld)) {
-                Usuarios oldUsuariosOfEstudiante = estudianteNew.getUsuarios();
-                if (oldUsuariosOfEstudiante != null) {
-                    oldUsuariosOfEstudiante.setEstudiante(null);
-                    oldUsuariosOfEstudiante = em.merge(oldUsuariosOfEstudiante);
-                }
-                estudianteNew.setUsuarios(usuarios);
-                estudianteNew = em.merge(estudianteNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -198,7 +74,7 @@ public class UsuariosJpaController implements Serializable {
             }
         }
     }
-
+    
     public void destroy(BigInteger id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
