@@ -43,14 +43,19 @@ public class JustificacionJpaController implements Serializable {
     }
 
     public void edit(Justificacion justificacion) throws Exception {
-        EntityManager em = null;
-        em = getEntityManager();
-        em.getTransaction().begin();
-        em.merge(justificacion);
-        em.getTransaction().commit();
-        em.close();
-    }
+        EntityManager em = getEntityManager();
 
+        try {
+            em.getTransaction().begin();
+            em.merge(justificacion);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 
     public void destroy(BigInteger id) throws NonexistentEntityException {
         EntityManager em = getEntityManager();
@@ -65,7 +70,6 @@ public class JustificacionJpaController implements Serializable {
 
     }
     
-
     public List<Justificacion> findJustificacionEntities() {
         return findJustificacionEntities(true, -1, -1);
     }
@@ -99,14 +103,12 @@ public class JustificacionJpaController implements Serializable {
         }
     }
     
-    public Justificacion findJustificacionUsuarioHoraEvento(Date fechaHora, Evento idEvento, Estudiante idUsuario){
+    public Justificacion findJustificacionUsuarioHoraEvento(String detalle){
         EntityManager em = getEntityManager();
         Justificacion justificacionRes = new Justificacion();
         try{
-        List<Justificacion> listaResultado = em.createNamedQuery("Justificacion.findByHoraEventoUsuario")
-                    .setParameter("fechaHora", fechaHora)
-                    .setParameter("idEvento", idEvento)
-                    .setParameter("idUsuario", idUsuario)
+        List<Justificacion> listaResultado = em.createNamedQuery("Justificacion.findByDetalle")
+                    .setParameter("detalle", detalle)
                 .getResultList();
         if (!listaResultado.isEmpty()) {
                 for (int i = 0; i < listaResultado.size(); i++) {
@@ -115,16 +117,16 @@ public class JustificacionJpaController implements Serializable {
                     Date fechayHora = listaResultado.get(i).getFechaHora();
                     Evento evento = listaResultado.get(i).getIdEvento();
                     Estudiante estudiante = listaResultado.get(i).getIdUsuario();
-                    String detalle = listaResultado.get(i).getDetalle();
+                    String detalleStr = listaResultado.get(i).getDetalle();
                     EstadoPeticion estado = listaResultado.get(i).getIdEstadoPeticion();
-                   
+                    
                     justificacionRes = Justificacion.builder()
                             .idJustificacion(idJus)
                             .idEvento(evento)
                             .idUsuario(estudiante)
                             .fechaHora(fechayHora)
                             .idEstadoPeticion(estado)
-                            .detalle(detalle)
+                            .detalle(detalleStr)
                             .build();
                 }
         }

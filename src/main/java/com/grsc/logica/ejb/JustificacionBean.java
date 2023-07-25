@@ -26,7 +26,7 @@ public class JustificacionBean implements JustificacionBeanRemote{
         
         boolean pudeCrear = false;
 
-        if ( existeJustificacion(fechaHora, evento, usuario) ) {
+        if ( existeJustificacion(detalle) ) {
             System.out.println("Justificacion con dicha documento ya registrado");
         } else {
             Justificacion jus = Justificacion.builder()
@@ -47,13 +47,13 @@ public class JustificacionBean implements JustificacionBeanRemote{
     }
 
     @Override
-    public Justificacion buscarJustificacion(Date fechayHora, Evento evento, Estudiante user) {
-        return controlador.findJustificacionUsuarioHoraEvento(fechayHora, evento, user);
+    public Justificacion buscarJustificacion(String detalle) {
+        return controlador.findJustificacionUsuarioHoraEvento(detalle);
     }
 
     @Override
-    public Boolean existeJustificacion(Date fechayHora, Evento evento, Estudiante user) {
-        Justificacion jus = buscarJustificacion(fechayHora, evento, user);
+    public Boolean existeJustificacion(String detalle) {
+        Justificacion jus = buscarJustificacion(detalle);
         return jus.getIdJustificacion()!=null;
     }
     
@@ -97,7 +97,6 @@ public class JustificacionBean implements JustificacionBeanRemote{
                     .idEstadoPeticion(estado)
                     .fechaHora(fechaHora)
                     .build();
-
             try {
                 controlador.edit(justificacion);
                 pudeModificar = true;

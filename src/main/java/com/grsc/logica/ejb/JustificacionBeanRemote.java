@@ -13,8 +13,8 @@ import javax.ejb.Remote;
 @Remote
 public interface JustificacionBeanRemote {
     Boolean hacerJustificacion(Date fechaHora, String detalle, Evento idEvento, Estudiante idUsuario) throws ParseException ;
-    Justificacion buscarJustificacion(Date fechayHora, Evento evento, Estudiante user);
-    Boolean existeJustificacion(Date fechayHora, Evento evento, Estudiante user);
+    Justificacion buscarJustificacion(String detalle);
+    Boolean existeJustificacion(String detalle);
     Boolean modificarJustificacion(BigInteger id);
     List<Justificacion> listarJustificacions();
     Boolean borrarJustificacion(BigInteger id);

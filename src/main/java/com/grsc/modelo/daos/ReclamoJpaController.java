@@ -1,6 +1,5 @@
 package com.grsc.modelo.daos;
 
-import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
