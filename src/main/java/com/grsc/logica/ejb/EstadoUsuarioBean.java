@@ -21,5 +21,9 @@ public class EstadoUsuarioBean implements EstadoUsuarioBeanRemote{
     public EstadoUsuario buscar(BigInteger id) {
         return controlador.findEstadoUsuario(id);
     }
-    
+ 
+    @Override
+    public EstadoUsuario buscarPorNom(String nom){
+        return controlador.findEstadoUsuario(nom);
+    }
 }

@@ -198,4 +198,29 @@ public class EstadoUsuarioJpaController implements Serializable {
         }
     }
     
+     public EstadoUsuario findEstadoUsuario(String nombre) {
+        EntityManager em = getEntityManager();
+        EstadoUsuario estadoRes = new EstadoUsuario();
+        try {
+            List<EstadoUsuario> listaResultado = em.createNamedQuery("EstadoUsuario.findByEstadoUsuario")
+                    .setParameter("estadoUsuario", nombre)
+                    .getResultList();
+            if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger id = listaResultado.get(i).getIdEstado();
+                    String nom = listaResultado.get(i).getEstadoUsuario();
+
+                    estadoRes = EstadoUsuario.builder()
+                            .idEstado(id)
+                            .estadoUsuario(nom)
+                            .build();
+                }
+            }
+            return estadoRes;
+        } finally {
+            em.close();
+        }
+    }
+
 }

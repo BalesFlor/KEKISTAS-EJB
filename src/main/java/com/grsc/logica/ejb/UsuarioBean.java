@@ -236,4 +236,40 @@ public class UsuarioBean implements UsuarioBeanRemote {
         }
         return pudeEditar;
     }
+    
+    @Override
+    public Boolean modificarEstado(Usuarios user, EstadoUsuario estado)throws Exception{
+        
+        boolean pudeModificar = false;
+            Usuarios usuario = Usuarios.builder()
+                .idUsuario(user.getIdUsuario())
+                .nomUsuario(user.getNomUsuario())
+                .nombre1(user.getNombre1())
+                .nombre2(user.getNombre2())
+                .apellido1(user.getApellido1())
+                .apellido2(user.getApellido2())
+                .documento(user.getDocumento())
+                .telefono(user.getTelefono())
+                .mailInstitucional(user.getMailInstitucional())
+                .mailPersonal(user.getMailPersonal())
+                .genero(user.getGenero())
+                .fecNac(user.getFecNac())
+                .Itr(user.getItr())
+                .departamento(user.getDepartamento())
+                .Localidad(user.getLocalidad())
+                .contrasenia(user.getContrasenia())
+                .Rol(user.getRol())
+                .idEstadoUsuario(estado)
+                .build();
+        try {
+                controlador.edit(usuario);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        return pudeModificar;
+        
+    }
+
 }

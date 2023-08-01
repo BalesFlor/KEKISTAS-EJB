@@ -35,4 +35,5 @@ public interface UsuarioBeanRemote {
     Boolean existeUserByMailP(String mailPers);
     List<Usuarios> listarUsuarios();
     EstadoUsuario obtenerEstado(BigInteger id);
+    Boolean modificarEstado(Usuarios user, EstadoUsuario estado)throws Exception;
 }
