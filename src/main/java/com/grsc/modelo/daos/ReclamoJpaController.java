@@ -10,6 +10,7 @@ import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Reclamo;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -189,6 +190,50 @@ public class ReclamoJpaController implements Serializable {
                             .idEstadoPeticion(estado)
                             .detalle(detalle)
                             .build();
+                }
+        }
+        return reclamoRes;
+        }finally {
+            em.close();
+        }        
+    }
+
+     public List<Reclamo> findReclamoByUsuario(Estudiante idUsuario){
+        EntityManager em = getEntityManager();
+        List<Reclamo> reclamoRes = new  ArrayList<>();
+        try{
+        List<Reclamo> listaResultado = em.createNamedQuery("Reclamo.findByIdUsuario")
+                    .setParameter("idUsuario", idUsuario)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idJus = listaResultado.get(i).getIdReclamo();
+                    Date fechayHora = listaResultado.get(i).getFechaHora();
+                    Evento evento = listaResultado.get(i).getIdEvento();
+                    BigInteger creditos = listaResultado.get(i).getCreditos();
+                    Estudiante estudiante = listaResultado.get(i).getIdUsuario();
+                    String titulo = listaResultado.get(i).getTitulo();
+                    Date fecha = listaResultado.get(i).getFecha();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    EstadoPeticion estado = listaResultado.get(i).getIdEstadoPeticion();
+                    BigInteger semestre = listaResultado.get(i).getSemestre();
+                    
+                    Reclamo reclamo = Reclamo.builder()
+                            .idReclamo(idJus)
+                            .idEvento(evento)
+                            .titulo(titulo)
+                            .creditos(creditos)
+                            .idUsuario(estudiante)
+                            .fechaHora(fechayHora)
+                            .fecha(fecha)
+                            .semestre(semestre)
+                         
+                            .idEstadoPeticion(estado)
+                            .detalle(detalle)
+                            .build();
+                    
+                    reclamoRes.add(reclamo);
                 }
         }
         return reclamoRes;

@@ -25,6 +25,11 @@ public class ReclamoBean implements ReclamoBeanRemote {
     }
 
     @Override
+    public List<Reclamo> listaReclamosByUser(Estudiante idUsuario) {
+        return controlador.findReclamoByUsuario(idUsuario);
+    }
+    
+    @Override
     public Boolean altaReclamo(String titulo, String descripcion, Evento evento, 
             BigInteger semestre, Estudiante estudiante, Date fechaHora, Date fecha) {
         
@@ -146,6 +151,26 @@ public class ReclamoBean implements ReclamoBeanRemote {
     @Override
     public Reclamo buscarReclamo(Date fechayHora, Evento evento, Estudiante user) {
         return controlador.findReclamoUsuarioHoraEvento(fechayHora, evento, user);
+    }
+
+    @Override
+    public Boolean modificarReclamo(Reclamo rec) {
+        boolean pudeModificar = false;
+        
+        if(controlador.findReclamo(rec.getIdReclamo())!=null){
+           
+            try {
+                controlador.edit(rec);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else{
+            System.out.println("No existe tal reclamo");
+        }
+       
+        return pudeModificar;
     }
 
 }

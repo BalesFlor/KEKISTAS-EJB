@@ -20,4 +20,6 @@ public interface ReclamoBeanRemote {
    Boolean modificarEstado(Reclamo rec, EstadoPeticion estado, Date fechaHora)throws Exception;
    Reclamo buscarReclamoPorId(BigInteger id);
    Reclamo buscarReclamo(Date fechayHora, Evento evento, Estudiante user);
+   Boolean modificarReclamo(Reclamo rec);
+   List<Reclamo> listaReclamosByUser(Estudiante idUsuario);
 }

@@ -61,6 +61,9 @@ public class Evento implements Serializable {
     @JoinColumn(name = "TIPO_EVENTO", referencedColumnName = "ID")
     @ManyToOne
     private TipoEvento tipoEvento;
+    @JoinColumn(name = "ID_TUTOR", referencedColumnName = "ID_USUARIO")
+    @ManyToOne
+    private Tutor tutor;
 
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(generator = "evento_seq")
@@ -135,6 +138,14 @@ public class Evento implements Serializable {
         this.convocatoriaAsistenciaList = convocatoriaAsistenciaList;
     }
 
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

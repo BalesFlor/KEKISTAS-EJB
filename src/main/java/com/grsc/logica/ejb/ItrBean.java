@@ -1,9 +1,10 @@
 package com.grsc.logica.ejb;
 
+import com.grsc.exceptions.IllegalOrphanException;
 import com.grsc.modelo.daos.ItrJpaController;
 import com.grsc.modelo.entities.Departamento;
 import com.grsc.modelo.entities.Itr;
-import com.grsc.modelo.entities.Usuarios;
+import com.grsc.modelo.entities.EstadoItr;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import com.grsc.exceptions.NonexistentEntityException;
 
 public class ItrBean implements ItrBeanRemote {
 
@@ -23,7 +25,7 @@ public class ItrBean implements ItrBeanRemote {
     }
 
     @Override
-    public Boolean altaITR(String nomItr, Departamento departamento) 
+    public Boolean altaITR(String nomItr, Departamento departamento, EstadoItr estado) 
         throws ParseException {
         boolean altaITR = false;
 
@@ -33,10 +35,8 @@ public class ItrBean implements ItrBeanRemote {
             Itr itr = Itr.builder()
             .nomItr(nomItr)
             .idDepartamento(departamento)
+            .idEstado(estado)
             .build();
-                
-           
-        
             try {
                 controlador.create(itr);
                 altaITR = true;
@@ -47,7 +47,31 @@ public class ItrBean implements ItrBeanRemote {
         return altaITR;
     }
     
-
+    @Override
+    public Itr buscarItr(String nom){
+        return controlador.findItr(nom);
+    }
+    
+    @Override
+    public Boolean borrarItr(BigInteger id){          
+        boolean pudeEliminar = false;
+        Itr reclamo = controlador.findItr(id);
+        if ( reclamo!=null ) {
+            try {
+                controlador.destroy(id);
+                pudeEliminar = true;
+            } catch (IllegalOrphanException ex) {
+                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+           System.out.println("Itr con dicha id no registrado");
+            
+        }
+        return pudeEliminar;
+    }
+    
     
     public Boolean modificarITR(Itr itr) {
         boolean pudeModificar = false;
@@ -62,7 +86,6 @@ public class ItrBean implements ItrBeanRemote {
         return pudeModificar;
     }
 
-   
     public Boolean eliminarITR(BigInteger idITR) {
         boolean pudeEliminar = false;
 
@@ -86,7 +109,8 @@ public class ItrBean implements ItrBeanRemote {
 
         return existe;
     }
-public Boolean existeItrByNombre(String nombre) {
+
+    public Boolean existeItrByNombre(String nombre) {
         Boolean existe = false;
 
         Itr itr = controlador.findItr(nombre);
@@ -95,9 +119,7 @@ public Boolean existeItrByNombre(String nombre) {
         }
 
         return existe;
-    }
+    }  
 
-
-   
 }
 

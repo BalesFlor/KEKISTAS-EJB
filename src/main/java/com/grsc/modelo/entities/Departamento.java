@@ -133,4 +133,5 @@ public class Departamento implements Serializable {
         return "com.grsc.modelo.entities.Departamento[ idDepartamento=" + idDepartamento + " ]";
     }
 
+
 }

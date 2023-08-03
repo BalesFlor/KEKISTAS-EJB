@@ -40,6 +40,9 @@ public class Itr implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "NOM_ITR")
     private String nomItr;
+    @JoinColumn(name = "ID_ESTADO", referencedColumnName = "ID_ESTADO")
+    @ManyToOne(optional = false)
+    private EstadoItr idEstado;
 
     private static final long serialVersionUID = 1L;
     @Id  @GeneratedValue(generator = "itr_seq")
@@ -121,6 +124,14 @@ public class Itr implements Serializable {
     @Override
     public String toString() {
         return "com.grsc.modelo.entities.Itr[ idItr=" + idItr + " ]";
+    }
+
+    public EstadoItr getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(EstadoItr idEstado) {
+        this.idEstado = idEstado;
     }
 
     
