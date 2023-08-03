@@ -29,7 +29,7 @@ public class ItrBean implements ItrBeanRemote {
         throws ParseException {
         boolean altaITR = false;
 
-        if (existeItrByNombre(nomItr)) {
+        if (controlador.findItr(nomItr)!=null) {
             System.out.println("ITR con dicho ID ya registrado");
         } else {
             Itr itr = Itr.builder()
@@ -53,39 +53,22 @@ public class ItrBean implements ItrBeanRemote {
     }
     
     @Override
-    public Boolean borrarItr(BigInteger id){          
-        boolean pudeEliminar = false;
-        Itr reclamo = controlador.findItr(id);
-        if ( reclamo!=null ) {
-            try {
-                controlador.destroy(id);
-                pudeEliminar = true;
-            } catch (IllegalOrphanException ex) {
-                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NonexistentEntityException ex) {
-                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-           System.out.println("Itr con dicha id no registrado");
-            
-        }
-        return pudeEliminar;
-    }
-    
-    
     public Boolean modificarITR(Itr itr) {
         boolean pudeModificar = false;
-
-        try {
-            controlador.edit(itr);
-            pudeModificar = true;
-        } catch (Exception ex) {
-            Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
+        if (controlador.findItr(itr.getNomItr())!=null) {
+            try {
+                controlador.edit(itr);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(ItrBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+        System.out.println("No existe itr para modificar");
         }
-
         return pudeModificar;
     }
 
+    @Override
     public Boolean eliminarITR(BigInteger idITR) {
         boolean pudeEliminar = false;
 
@@ -110,16 +93,6 @@ public class ItrBean implements ItrBeanRemote {
         return existe;
     }
 
-    public Boolean existeItrByNombre(String nombre) {
-        Boolean existe = false;
-
-        Itr itr = controlador.findItr(nombre);
-        if (itr != null) {
-            existe = true;
-        }
-
-        return existe;
-    }  
 
 }
 

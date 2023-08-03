@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import com.grsc.modelo.entities.Departamento;
+import com.grsc.modelo.entities.EstadoItr;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Itr;
 import com.grsc.modelo.entities.TipoEvento;
@@ -48,110 +49,32 @@ public class ItrJpaController implements Serializable {
     }
 
     public void edit(Itr itr) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        EntityManager em = null;
+       EntityManager em = getEntityManager();
+
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
-            Itr persistentItr = em.find(Itr.class, itr.getIdItr());
-            Departamento idDepartamentoOld = persistentItr.getIdDepartamento();
-            Departamento idDepartamentoNew = itr.getIdDepartamento();
-            List<Usuarios> usuariosListOld = persistentItr.getUsuariosList();
-            List<Usuarios> usuariosListNew = itr.getUsuariosList();
-            List<String> illegalOrphanMessages = null;
-            for (Usuarios usuariosListOldUsuarios : usuariosListOld) {
-                if (!usuariosListNew.contains(usuariosListOldUsuarios)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Usuarios " + usuariosListOldUsuarios + " since its idItr field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (idDepartamentoNew != null) {
-                idDepartamentoNew = em.getReference(idDepartamentoNew.getClass(), idDepartamentoNew.getIdDepartamento());
-                itr.setIdDepartamento(idDepartamentoNew);
-            }
-            List<Usuarios> attachedUsuariosListNew = new ArrayList<Usuarios>();
-            for (Usuarios usuariosListNewUsuariosToAttach : usuariosListNew) {
-                usuariosListNewUsuariosToAttach = em.getReference(usuariosListNewUsuariosToAttach.getClass(), usuariosListNewUsuariosToAttach.getIdUsuario());
-                attachedUsuariosListNew.add(usuariosListNewUsuariosToAttach);
-            }
-            usuariosListNew = attachedUsuariosListNew;
-            itr.setUsuariosList(usuariosListNew);
-            itr = em.merge(itr);
-            if (idDepartamentoOld != null && !idDepartamentoOld.equals(idDepartamentoNew)) {
-                idDepartamentoOld.getItrList().remove(itr);
-                idDepartamentoOld = em.merge(idDepartamentoOld);
-            }
-            if (idDepartamentoNew != null && !idDepartamentoNew.equals(idDepartamentoOld)) {
-                idDepartamentoNew.getItrList().add(itr);
-                idDepartamentoNew = em.merge(idDepartamentoNew);
-            }
-            for (Usuarios usuariosListNewUsuarios : usuariosListNew) {
-                if (!usuariosListOld.contains(usuariosListNewUsuarios)) {
-                    Itr oldIdItrOfUsuariosListNewUsuarios = usuariosListNewUsuarios.getItr();
-                    usuariosListNewUsuarios.setItr(itr);
-                    usuariosListNewUsuarios = em.merge(usuariosListNewUsuarios);
-                    if (oldIdItrOfUsuariosListNewUsuarios != null && !oldIdItrOfUsuariosListNewUsuarios.equals(itr)) {
-                        oldIdItrOfUsuariosListNewUsuarios.getUsuariosList().remove(usuariosListNewUsuarios);
-                        oldIdItrOfUsuariosListNewUsuarios = em.merge(oldIdItrOfUsuariosListNewUsuarios);
-                    }
-                }
-            }
+            em.merge(itr);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            String msg = ex.getLocalizedMessage();
-            if (msg == null || msg.length() == 0) {
-                BigInteger id = itr.getIdItr();
-                if (findItr(id) == null) {
-                    throw new NonexistentEntityException("The itr with id " + id + " no longer exists.");
-                }
-            }
+            em.getTransaction().rollback();
             throw ex;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            em.close();
         }
     }
 
+
     public void destroy(BigInteger id) throws IllegalOrphanException, NonexistentEntityException {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            Itr itr;
-            try {
-                itr = em.getReference(Itr.class, id);
-                itr.getIdItr();
-            } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The itr with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            List<Usuarios> usuariosListOrphanCheck = itr.getUsuariosList();
-            for (Usuarios usuariosListOrphanCheckUsuarios : usuariosListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Itr (" + itr + ") cannot be destroyed since the Usuarios " + usuariosListOrphanCheckUsuarios + " in its usuariosList field has a non-nullable idItr field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Departamento idDepartamento = itr.getIdDepartamento();
-            if (idDepartamento != null) {
-                idDepartamento.getItrList().remove(itr);
-                idDepartamento = em.merge(idDepartamento);
-            }
-            em.remove(itr);
-            em.getTransaction().commit();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+        EntityManager em = getEntityManager();
+        em.getTransaction().begin();
+
+        Itr itr = em.find(Itr.class, id);
+        if (itr == null) {
+            throw new NonexistentEntityException("No existe la itr a borrar. Id=" + itr.getIdItr());
         }
+        em.remove(itr);
+        em.getTransaction().commit();
+
     }
 
     public List<Itr> findItrEntities() {
@@ -212,11 +135,12 @@ public class ItrJpaController implements Serializable {
                     BigInteger idItr = listaResultado.get(i).getIdItr();               
                     String nomItr = listaResultado.get(i).getNomItr();
                     Departamento departamento = listaResultado.get(i).getIdDepartamento();
-                    
+                    EstadoItr estado = listaResultado.get(i).getIdEstado();
                     
                     itrRes = Itr.builder()
                             .idItr(idItr)
                             .nomItr(nomItr)
+                            .idEstado(estado)
                             .idDepartamento(departamento)
                             .build();
                 }
@@ -225,9 +149,6 @@ public class ItrJpaController implements Serializable {
         }finally {
             em.close();
         }        
-    }
-    public Itr findByIDItr(BigInteger idITR) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

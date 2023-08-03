@@ -113,5 +113,29 @@ public class JustificacionBean implements JustificacionBeanRemote{
         return controlador.findJustificacionEntities();
     }
 
+    @Override
+    public Boolean modificarJustificacion(Justificacion jus) {
+        boolean pudeModificar = false;
+        
+        if(controlador.findJustificacion(jus.getIdJustificacion())!=null){
+           
+            try {
+                controlador.edit(jus);
+                pudeModificar = true;
+            } catch (Exception ex) {
+                Logger.getLogger(UsuarioBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }else{
+            System.out.println("No existe tal justificacion");
+        }
+       
+        return pudeModificar;
+    }
+
+    @Override
+    public List<Justificacion> listaJustificacionsByUser(Estudiante idUsuario) {
+        return controlador.findJustificacionByUsuario(idUsuario);
+    }
     
 }

@@ -20,4 +20,6 @@ public interface JustificacionBeanRemote {
     Boolean borrarJustificacion(BigInteger id);
     Boolean modificarEstado(Justificacion jus, EstadoPeticion estado, Date fechaHora)throws Exception;
     Justificacion buscarJustificacionPorId(BigInteger id);
+    Boolean modificarJustificacion(Justificacion jus);
+    List<Justificacion> listaJustificacionsByUser(Estudiante idUsuario);
 }

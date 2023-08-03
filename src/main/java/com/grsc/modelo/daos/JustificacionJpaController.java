@@ -10,6 +10,7 @@ import com.grsc.modelo.entities.EstadoPeticion;
 import com.grsc.modelo.entities.Evento;
 import com.grsc.modelo.entities.Justificacion;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -148,5 +149,41 @@ public class JustificacionJpaController implements Serializable {
             em.close();
         }
     }
+    
+     public List<Justificacion> findJustificacionByUsuario(Estudiante idUsuario){
+        EntityManager em = getEntityManager();
+        List<Justificacion> jusRes = new  ArrayList<>();
+        try{
+        List<Justificacion> listaResultado = em.createNamedQuery("Justificacion.findByIdUsuario")
+                    .setParameter("idUsuario", idUsuario)
+                .getResultList();
+        if (!listaResultado.isEmpty()) {
+                for (int i = 0; i < listaResultado.size(); i++) {
+                    
+                    BigInteger idJus = listaResultado.get(i).getIdJustificacion();
+                    Date fechayHora = listaResultado.get(i).getFechaHora();
+                    Evento evento = listaResultado.get(i).getIdEvento();
+                    Estudiante estudiante = listaResultado.get(i).getIdUsuario();
+                    String detalle = listaResultado.get(i).getDetalle();
+                    EstadoPeticion estado = listaResultado.get(i).getIdEstadoPeticion();
+                    
+                    Justificacion reclamo = Justificacion.builder()
+                            .idJustificacion(idJus)
+                            .idEvento(evento)
+                            .idUsuario(estudiante)
+                            .fechaHora(fechayHora)
+                            .idEstadoPeticion(estado)
+                            .detalle(detalle)
+                            .build();
+                    
+                    jusRes.add(reclamo);
+                }
+        }
+        return jusRes;
+        }finally {
+            em.close();
+        }        
+    }
+
     
 }

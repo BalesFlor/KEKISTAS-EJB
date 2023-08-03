@@ -14,5 +14,6 @@ public interface ItrBeanRemote {
     List<Itr> listarItrs();
     Boolean altaITR(String nomItr, Departamento departamento, EstadoItr estado) throws ParseException;
     Itr buscarItr(String nom);
-    Boolean borrarItr(BigInteger id);
+    Boolean modificarITR(Itr itr);
+    Boolean eliminarITR(BigInteger idITR);
 }
